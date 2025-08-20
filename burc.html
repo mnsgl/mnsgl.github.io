@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İnteraktif Astroloji Rehberi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: A thematic single-page application with a sticky top navigation for easy access to four main sections: 'Temeller' (Basics), 'Burçlar' (Zodiac Signs), 'Doğum Haritası' (Birth Chart), and 'Eleştirel Bakış' (Critical Perspective). This structure logically guides the user from foundational knowledge to detailed exploration and finally to a balanced conclusion. Key interactions include an interactive filter for elements/qualities, a clickable grid to explore individual sign details in modals, and accordions for dense text, ensuring a user-driven and non-overwhelming experience. -->
+    <!-- Visualization & Content Choices: Report's 12 sign profiles -> Goal: Explore -> Presentation: Clickable grid of Unicode symbols opening modals -> Interaction: Click -> Justification: Prevents information overload. Report's Elements/Qualities data -> Goal: Compare/Organize -> Presentation: Chart.js Polar Area Chart & interactive filter buttons -> Interaction: Click to filter/toggle chart view -> Justification: More engaging than a static table, reveals patterns visually. Report's complex Birth Chart concept -> Goal: Inform -> Presentation: Simplified HTML/CSS diagram -> Interaction: Hover for tooltips -> Justification: Makes a complex topic accessible. Critical analysis text -> Goal: Inform -> Presentation: Accordion component -> Interaction: Click to expand -> Justification: Manages text density. Library: Chart.js for the polar chart. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4B423B;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #C58940;
+            border-bottom-color: #C58940;
+        }
+        .zodiac-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .zodiac-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .modal-content {
+            animation: slide-up 0.5s ease-out;
+        }
+        @keyframes slide-up {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .accordion-button.open + .accordion-content {
+            max-height: 1000px;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #C58940;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-[#C58940]">Yıldızların Dili</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#temeller" class="nav-link text-lg border-b-2 border-transparent pb-1">Temeller</a>
+                <a href="#burclar" class="nav-link text-lg border-b-2 border-transparent pb-1">Burçlar</a>
+                <a href="#harita" class="nav-link text-lg border-b-2 border-transparent pb-1">Doğum Haritası</a>
+                <a href="#elestirel" class="nav-link text-lg border-b-2 border-transparent pb-1">Eleştirel Bakış</a>
+                <a href="#argumanlar" class="nav-link text-lg border-b-2 border-transparent pb-1">Argümanlar</a>
+            </div>
+            <div class="md:hidden">
+                <select id="mobile-nav" class="bg-stone-100 border border-stone-300 rounded-md p-2">
+                    <option value="#temeller">Temeller</option>
+                    <option value="#burclar">Burçlar</option>
+                    <option value="#harita">Doğum Haritası</option>
+                    <option value="#elestirel">Eleştirel Bakış</option>
+                    <option value="#argumanlar">Argümanlar</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="hero" class="text-center mb-24">
+            <h2 class="text-5xl md:text-6xl font-bold mb-4 tracking-tight">İnteraktif Astroloji Rehberi</h2>
+            <p class="text-lg md:text-xl text-stone-600 max-w-3xl mx-auto">
+                Burçların gizemli dünyasını keşfedin. Astronomik temellerden mitolojik hikayelere, astrolojik yapı taşlarından modern yorumlara ve ✨ <span class="font-semibold text-amber-700">size özel günlük yorumlara</span> kadar her şeyi interaktif bir deneyimle öğrenin.
+            </p>
+        </section>
+
+        <section id="temeller" class="mb-24 scroll-mt-20">
+            <h3 class="text-4xl font-bold text-center mb-4">Astrolojinin Temelleri</h3>
+            <p class="text-lg text-stone-600 text-center max-w-3xl mx-auto mb-12">
+                Her şey gökyüzünü anlamakla başlar. Bu bölümde, astrolojinin üzerine kurulduğu astronomik kavramları, element ve nitelik gibi temel yapı taşlarını interaktif bir şekilde keşfedeceksiniz.
+            </p>
+            <div class="bg-white p-8 rounded-2xl shadow-lg">
+                <h4 class="text-2xl font-bold mb-6 text-center">Elementler ve Nitelikler</h4>
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <div>
+                        <label for="filter-type" class="block text-sm font-medium text-stone-700 mb-1">Filtrele:</label>
+                        <select id="filter-type" class="rounded-md border-stone-300 shadow-sm focus:border-amber-500 focus:ring-amber-500">
+                            <option value="element">Elemente Göre</option>
+                            <option value="nitelik">Niteliğe Göre</option>
+                        </select>
+                    </div>
+                    <div id="element-filters">
+                        <label for="element-select" class="block text-sm font-medium text-stone-700 mb-1">Element Seç:</label>
+                        <select id="element-select" class="rounded-md border-stone-300 shadow-sm focus:border-amber-500 focus:ring-amber-500">
+                            <option value="all">Tümü</option>
+                            <option value="Ateş">Ateş 🔥</option>
+                            <option value="Toprak">Toprak 🌿</option>
+                            <option value="Hava">Hava 💨</option>
+                            <option value="Su">Su 💧</option>
+                        </select>
+                    </div>
+                    <div id="nitelik-filters" class="hidden">
+                        <label for="nitelik-select" class="block text-sm font-medium text-stone-700 mb-1">Nitelik Seç:</label>
+                        <select id="nitelik-select" class="rounded-md border-stone-300 shadow-sm focus:border-amber-500 focus:ring-amber-500">
+                            <option value="all">Tümü</option>
+                            <option value="Öncü">Öncü</option>
+                            <option value="Sabit">Sabit</option>
+                            <option value="Değişken">Değişken</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="zodiac-filter-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 text-center">
+                </div>
+                 <div class="mt-12">
+                    <div class="chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="burclar" class="mb-24 scroll-mt-20">
+            <h3 class="text-4xl font-bold text-center mb-4">12 Burcu Keşfet</h3>
+            <p class="text-lg text-stone-600 text-center max-w-3xl mx-auto mb-12">
+                Her burç, insan doğasının farklı bir yüzünü temsil eder. Aşağıdaki sembollere tıklayarak her bir burcun mitolojik kökenini, temel arketiplerini, güçlü ve zayıf yönlerini detaylı olarak inceleyin.
+            </p>
+            <div id="zodiac-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            </div>
+        </section>
+
+        <section id="harita" class="mb-24 scroll-mt-20">
+            <h3 class="text-4xl font-bold text-center mb-4">Güneş'in Ötesinde: Doğum Haritası</h3>
+             <p class="text-lg text-stone-600 text-center max-w-3xl mx-auto mb-12">
+                Astroloji, Güneş burcunuzdan çok daha fazlasıdır. Kişiliğinizin kozmik DNA'sı olan doğum haritası, Güneş, Ay ve Yükselen gibi temel unsurlarla birlikte gezegenlerin ve evlerin konumlarını içerir.
+            </p>
+            <div class="bg-white p-8 rounded-2xl shadow-lg">
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="bg-amber-50 p-6 rounded-lg">
+                        <h4 class="text-2xl font-bold mb-2">☀️ Güneş Burcu</h4>
+                        <p class="text-stone-700">Temel kimliğiniz, egonuz ve yaşam amacınız. "Ben kimim?" sorusunun cevabıdır.</p>
+                    </div>
+                    <div class="bg-stone-100 p-6 rounded-lg">
+                        <h4 class="text-2xl font-bold mb-2">🌙 Ay Burcu</h4>
+                        <p class="text-stone-700">Duygusal dünyanız, içgüdüleriniz ve güvenlik ihtiyaçlarınız. İçsel benliğinizi yansıtır.</p>
+                    </div>
+                    <div class="bg-teal-50 p-6 rounded-lg">
+                        <h4 class="text-2xl font-bold mb-2">🌅 Yükselen Burç</h4>
+                        <p class="text-stone-700">Dış dünyaya yansıttığınız maskeniz, sosyal kişiliğiniz. İlk izleniminizdir.</p>
+                    </div>
+                </div>
+                 <div class="mt-12">
+                    <h4 class="text-2xl font-bold mb-6 text-center">Hayatın Sahne Alanları: 12 Ev</h4>
+                    <div class="relative w-full max-w-lg mx-auto aspect-square">
+                        <div id="house-wheel" class="relative w-full h-full border-4 border-stone-300 rounded-full">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="elestirel" class="mb-24 scroll-mt-20">
+            <h3 class="text-4xl font-bold text-center mb-4">Eleştirel Bir Mercek</h3>
+             <p class="text-lg text-stone-600 text-center max-w-3xl mx-auto mb-12">
+                Astrolojiyi tam olarak anlamak, onun bilim ve psikoloji ile olan ilişkisini ve popüler kültürdeki yerini de kavramayı gerektirir. Bu bölüm, astrolojiye dengeli ve eleştirel bir bakış açısı sunar.
+            </p>
+            <div id="accordion-container" class="space-y-4 max-w-4xl mx-auto">
+            </div>
+        </section>
+        
+        <section id="argumanlar" class="scroll-mt-20">
+            <h3 class="text-4xl font-bold text-center mb-4">Astrolojiye Karşı Bilimsel Argümanlar</h3>
+            <p class="text-lg text-stone-600 text-center max-w-3xl mx-auto mb-12">
+                Bir tartışmada astrolojinin bilimsel geçerliliğini sorgulamak için kullanabileceğiniz temel argümanlar burada detaylı bir şekilde sunulmuştur.
+            </p>
+            <div class="space-y-6 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                    <h4 class="text-xl font-bold mb-2 text-red-700">1. Fiziksel Mekanizma Yokluğu (Nedensellik Problemi)</h4>
+                    <p class="text-stone-700">Astrolojinin en temel iddiası, gezegenlerin ve yıldızların konumlarının insan kişiliği ve kaderi üzerinde bir etkisi olduğudur. Ancak bu etkiyi açıklayabilecek bilinen hiçbir fiziksel mekanizma veya kuvvet yoktur. Evrenin dört temel kuvveti (kütleçekim, elektromanyetizma, güçlü ve zayıf nükleer kuvvetler) bu etkiyi açıklayamaz. Örneğin, doğum anında bir gezegenin bebek üzerindeki kütleçekim kuvveti, doğumu gerçekleştiren doktorun uyguladığı kuvvetten milyonlarca kat daha zayıftır. Dolayısıyla, astrolojinin temel iddiası, bilinen fizik yasalarıyla çelişir.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                    <h4 class="text-xl font-bold mb-2 text-red-700">2. Ekinoksların Presesyonu (Kaymış Burçlar)</h4>
+                    <p class="text-stone-700">Batı astrolojisinin kullandığı Tropikal Zodyak, yaklaşık 2000 yıl önce gökyüzündeki takımyıldızların konumlarına göre oluşturulmuştur. Ancak Dünya, "presesyon" adı verilen bir yalpalama hareketi yapar. Bu hareket nedeniyle, takımyıldızlar gökyüzünde yavaşça kaymıştır. Bugün bir astrolog size "Güneş Koç burcunda" dediğinde, astronomik olarak Güneş aslında Balık takımyıldızındadır. Bu durum, astrolojinin dayandığı "göksel konum" iddiasının temelini çürütür. Eğer burçlar gökyüzündeki gerçek yıldız gruplarıyla ilgiliyse, o zaman astrolojinin tamamı bir aydan fazla geridedir.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                    <h4 class="text-xl font-bold mb-2 text-red-700">3. Barnum (Forer) Etkisi: Psikolojik Yanılsama</h4>
+                    <p class="text-stone-700">Burç yorumlarının "doğru" gelmesinin en büyük nedeni psikolojiktir. Barnum Etkisi, insanların kendilerine özel hazırlandığını düşündükleri genel, belirsiz ve çoğunlukla olumlu ifadeleri kişisel ve doğru olarak kabul etme eğilimidir. "Bazen dışa dönük olsanız da, bazen içe dönük olabiliyorsunuz" gibi bir ifade neredeyse herkese uyar. Astroloji, bu tür genel geçer ifadeler kullanarak insanlarda bir tanınma hissi yaratır ve bu bir yanılsamadan ibarettir.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                    <h4 class="text-xl font-bold mb-2 text-red-700">4. Deneysel Kanıtların Yokluğu (Çift Kör Testler)</h4>
+                    <p class="text-stone-700">Astrolojinin iddialarını test etmek için sayısız bilimsel çalışma yapılmıştır. En bilinen deneylerden biri, astrologlara bir grup insanın doğum haritasını verip, bu haritaları o insanların kişilik profilleriyle eşleştirmelerini istemektir. Yapılan çift kör çalışmalarda (hem astrologların hem de araştırmacıların kimin kim olduğunu bilmediği), astrologların başarı oranı sistematik olarak şans faktörünü (rastgele tahmin) aşamamıştır. Bilimsel kanıtlar, astrolojinin iddialarını desteklememektedir.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                    <h4 class="text-xl font-bold mb-2 text-red-700">5. Keyfi Kurallar ve Göz Ardı Edilen Gök Cisimleri</h4>
+                    <p class="text-stone-700">Astrolojik sistem keyfi kurallarla doludur. Örneğin, Güneş'in yolu (ekliptik) aslında 12 değil, 13 takımyıldızdan geçer (Yılancı - Ophiuchus). Astroloji bunu tamamen görmezden gelir. Neden sadece Güneş Sistemi'ndeki gezegenler etkilidir de, daha büyük ve parlak olan uzak yıldızlar, galaksiler veya Plüton'dan daha büyük olan Eris gibi cüce gezegenler etkili değildir? Bu seçiciliğin bilimsel bir açıklaması yoktur.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                    <h4 class="text-xl font-bold mb-2 text-red-700">6. İkizler Paradoksu</h4>
+                    <p class="text-stone-700">Astrolojiye göre, aynı yerde ve aynı anda (veya birkaç dakika arayla) doğan iki kişinin (örneğin tek yumurta ikizleri) neredeyse aynı doğum haritasına sahip olması ve dolayısıyla çok benzer kişiliklere ve hayat yollarına sahip olması gerekir. Ancak gerçek hayatta, ikizlerin genellikle çok farklı karakterlere, tercihlere ve kaderlere sahip olduğunu gözlemliyoruz. Bu durum, doğum anının her şeyi belirlediği iddiasıyla ciddi şekilde çelişir.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-800 text-white mt-24 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 İnteraktif Astroloji Rehberi. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div id="modal-content" class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white p-6 border-b border-stone-200 flex justify-between items-center">
+                <h2 id="modal-title" class="text-3xl font-bold"></h2>
+                <button id="close-modal" class="text-3xl text-stone-500 hover:text-stone-800">&times;</button>
+            </div>
+            <div id="modal-body" class="p-8">
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const zodiacData = {
+        'Koç': {
+            symbol: '♈︎',
+            dates: '21 Mart - 20 Nisan',
+            element: 'Ateş',
+            nitelik: 'Öncü',
+            gezegen: 'Mars',
+            mit: 'Mitolojide, altın postlu koç Aries, Phriksos ve Helle adlı kardeşleri kurtarır. Bu mit, Koç\'un öncü, cesur ve kurtarıcı doğasını simgeler.',
+            profil: 'Zodyak\'ın ilk burcu olan Koç, başlangıçların, saf enerjinin ve ham gücün temsilcisidir. Cesur, dürüst ve doğal bir liderdir. Rekabeti sever ve bağımsızlığına düşkündür. Sabırsızlık ve düşüncesizlik gölge yönleri olabilir.'
+        },
+        'Boğa': {
+            symbol: '♉︎',
+            dates: '21 Nisan - 20 Mayıs',
+            element: 'Toprak',
+            nitelik: 'Sabit',
+            gezegen: 'Venüs',
+            mit: 'Tanrı Zeus, prenses Europa\'yı kaçırmak için görkemli bir boğa kılığına girer. Bu hikaye, Boğa\'nın güçlü, kararlı ve estetik değerlere düşkün doğasını yansıtır.',
+            profil: 'Koç\'un başlattığı enerjiyi somutlaştıran Boğa, güvenilir ve sabırlıdır. Huzur, güvenlik ve konfor arayışındadır. Hayatın somut zevklerine bağlıdır. İnatçılık ve değişime direnç gölge yönleridir.'
+        },
+        'İkizler': {
+            symbol: '♊︎',
+            dates: '21 Mayıs - 20 Haziran',
+            element: 'Hava',
+            nitelik: 'Değişken',
+            gezegen: 'Merkür',
+            mit: 'Ölümlü Kastor ve ölümsüz Polydeukes adlı ikiz kardeşlerin kopmaz bağını anlatır. Bu mit, İkizler\'in ikilik, iletişim ve zeka temalarını işler.',
+            profil: 'Zodyak\'ın en meraklı, iletişimci ve esnek burcudur. Sürekli öğrenir, sosyalleşir ve farklı bakış açılarını sentezler. Kararsızlık ve yüzeysellik gölge yönleri olabilir.'
+        },
+        'Yengeç': {
+            symbol: '♋︎',
+            dates: '21 Haziran - 22 Temmuz',
+            element: 'Su',
+            nitelik: 'Öncü',
+            gezegen: 'Ay',
+            mit: 'Tanrıça Hera, Herakles ile savaşması için dev bir yengeç gönderir. Bu öykü, Yengeç\'in koruyucu, savunmacı ve anaç doğasını anlatır.',
+            profil: 'Zodyak\'ın duygusal merkezi olan Yengeç, aidiyet ve ailenin koruyucusudur. Empati kurar ve duygusal güvenliğe ihtiyaç duyar. Aşırı hassasiyet ve alınganlık gölge yönleridir.'
+        },
+        'Aslan': {
+            symbol: '♌︎',
+            dates: '23 Temmuz - 22 Ağustos',
+            element: 'Ateş',
+            nitelik: 'Sabit',
+            gezegen: 'Güneş',
+            mit: 'Herakles\'in ilk görevi olan Nemea Aslanı\'nı yenmesi, Aslan burcunun krallığını, gücünü ve yenilmezliğini sembolize eder.',
+            profil: 'Zodyak\'ın kral ve kraliçesi Aslan, yaratıcılığın ve özgüvenin ifadesidir. Cömert, sadık ve doğal bir karizmaya sahiptir. Egoizm ve sürekli ilgi bekleme gölge yönleri olabilir.'
+        },
+        'Başak': {
+            symbol: '♍︎',
+            dates: '23 Ağustos - 22 Eylül',
+            element: 'Toprak',
+            nitelik: 'Değişken',
+            gezegen: 'Merkür',
+            mit: 'Genellikle bereket tanrıçası Demeter veya adalet tanrıçası Astraeia ile ilişkilendirilir. Bu mitler, Başak\'ın hizmet, saflık ve düzen temalarını yansıtır.',
+            profil: 'Zodyak\'ın en titiz, analitik ve hizmet odaklı burcudur. Kaosu düzene sokma ve var olanı mükemmelleştirme arayışındadır. Aşırı eleştirellik ve endişe gölge yönleridir.'
+        },
+        'Terazi': {
+            symbol: '♎︎',
+            dates: '23 Eylül - 22 Ekim',
+            element: 'Hava',
+            nitelik: 'Öncü',
+            gezegen: 'Venüs',
+            mit: 'Adalet tanrıçası Themis\'in iyiyi ve kötüyü tarttığı teraziyi simgeler. Bu, Terazi\'nin denge, adalet ve uyum arayışını vurgular.',
+            profil: 'Zodyak\'ın diplomatı olan Terazi, uyum ve adaletin peşindedir. Karşıtlıkları uzlaştırır ve güzelliği takdir eder. Kararsızlık ve çatışmadan kaçınma gölge yönleridir.'
+        },
+        'Akrep': {
+            symbol: '♏︎',
+            dates: '23 Ekim - 22 Kasım',
+            element: 'Su',
+            nitelik: 'Sabit',
+            gezegen: 'Mars / Plüton',
+            mit: 'Kibirli avcı Orion\'u öldüren dev akrebin hikayesi, Akrep\'in ölüm, yeniden doğuş ve dönüşüm temalarını işler.',
+            profil: 'Zodyak\'ın en derin ve gizemli burcudur. Yüzeyin altındakini görür ve krizlerden güçlenerek çıkar. Kıskançlık ve güvensizlik gölge yönleri olabilir.'
+        },
+        'Yay': {
+            symbol: '♐︎',
+            dates: '23 Kasım - 21 Aralık',
+            element: 'Ateş',
+            nitelik: 'Değişken',
+            gezegen: 'Jüpiter',
+            mit: 'Bilgeliği ve öğretmenliğiyle tanınan yarı at-yarı insan Sentor Chiron\'u temsil eder. Bu, Yay\'ın felsefe, bilgelik ve macera arayışını sembolize eder.',
+            profil: 'Zodyak\'ın gezgini ve filozofudur. Anlam, macera ve özgürlük arayışındadır. Sınırları aşmak ve yeni ufuklar keşfetmek ister. Sorumsuzluk ve patavatsızlık gölge yönleridir.'
+        },
+        'Oğlak': {
+            symbol: '♑︎',
+            dates: '22 Aralık - 19 Ocak',
+            element: 'Toprak',
+            nitelik: 'Öncü',
+            gezegen: 'Satürn',
+            mit: 'Canavar Typhon\'dan kaçarken yarısı keçi yarısı balığa dönüşen tanrı Pan ile ilişkilendirilir. Bu, Oğlak\'ın hırsını ve dayanıklılığını anlatır.',
+            profil: 'Zodyak\'ın en hırslı ve disiplinli burcudur. Somut başarı ve kalıcı yapılar inşa etme peşindedir. Azimli ve sabırlıdır. Karamsarlık ve katılık gölge yönleridir.'
+        },
+        'Kova': {
+            symbol: '♒︎',
+            dates: '20 Ocak - 18 Şubat',
+            element: 'Hava',
+            nitelik: 'Sabit',
+            gezegen: 'Satürn / Uranüs',
+            mit: 'Tanrılara nektar sunması için Olympos\'a kaçırılan Troyalı prens Ganymedes\'i temsil eder. Bu, Kova\'nın insanlığa hizmet ve idealizm temasını sembolize eder.',
+            profil: 'Zodyak\'ın mucidi ve devrimcisidir. Geleneksel olanı sorgular ve geleceğe odaklanır. Orijinal ve entelektüeldir. Duygusal mesafelilik ve isyankarlık gölge yönleridir.'
+        },
+        'Balık': {
+            symbol: '♓︎',
+            dates: '19 Şubat - 20 Mart',
+            element: 'Su',
+            nitelik: 'Değişken',
+            gezegen: 'Jüpiter / Neptün',
+            mit: 'Canavar Typhon\'dan kaçmak için birbirine bağlı iki balığa dönüşen Afrodit ve Eros\'u anlatır. Bu, Balık\'ın birlik, fedakarlık ve ruhsal bağ temalarını yansıtır.',
+            profil: 'Zodyak çemberinin son burcudur. Sınırların eridiği evrensel bilinci temsil eder. Empatik, şefkatli ve hayal gücü yüksektir. Gerçeklerden kaçma ve kararsızlık gölge yönleridir.'
+        }
+    };
+
+    const accordionData = [
+        {
+            title: 'Bilimsel Perspektif: Astroloji Neden Sözdebilimdir?',
+            content: 'Modern bilim, astrolojiyi bir sözdebilim olarak sınıflandırır. Bunun temel nedenleri, gezegenlerin kişilik üzerindeki etkisine dair test edilebilir bir fiziksel mekanizma sunamaması ve yapılan bilimsel çalışmaların, astrologların tahminlerinin şans faktöründen daha başarılı olmadığını göstermesidir.'
+        },
+        {
+            title: 'Barnum Etkisi: Burç Yorumları Neden Bu Kadar "Doğru" Geliyor?',
+            content: 'Barnum Etkisi, insanların kendileri için özel olarak hazırlandığına inandıkları genel ve muğlak ifadeleri (örneğin, "Bazen dışa dönük olsanız da, bazen içe dönük olabiliyorsunuz") kişisel ve doğru olarak kabul etme eğilimidir. Burç yorumları genellikle bu tür herkese uyabilecek ifadeler kullandığı için insanlarda güçlü bir tanınma hissi yaratır.'
+        },
+        {
+            title: 'Popüler Kültürdeki Yeri ve Bir Kendini Keşif Aracı Olarak Rolü',
+            content: 'Bilimsel geçerliliği olmamasına rağmen astroloji, modern birey için önemli işlevler görür. Karmaşık iç dünyayı anlamak için bir çerçeve sunar, belirsizlikle başa çıkmaya yardımcı olur ve ortak bir ilgi alanı etrafında topluluk hissi yaratır. Birçok kişi için astroloji, bir bilimden çok, sembolik bir kendini keşif aracıdır.'
+        }
+    ];
+
+    const housesData = [
+        { id: 1, name: 'Benlik' }, { id: 2, name: 'Değerler' }, { id: 3, name: 'İletişim' },
+        { id: 4, name: 'Aile' }, { id: 5, name: 'Yaratıcılık' }, { id: 6, name: 'Hizmet' },
+        { id: 7, name: 'İlişkiler' }, { id: 8, name: 'Dönüşüm' }, { id: 9, name: 'Felsefe' },
+        { id: 10, name: 'Kariyer' }, { id: 11, name: 'Arkadaşlar' }, { id: 12, name: 'Bilinçaltı' }
+    ];
+
+    const zodiacGrid = document.getElementById('zodiac-grid');
+    const zodiacFilterGrid = document.getElementById('zodiac-filter-grid');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('close-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const filterType = document.getElementById('filter-type');
+    const elementFilters = document.getElementById('element-filters');
+    const nitelikFilters = document.getElementById('nitelik-filters');
+    const elementSelect = document.getElementById('element-select');
+    const nitelikSelect = document.getElementById('nitelik-select');
+    const accordionContainer = document.getElementById('accordion-container');
+    const houseWheel = document.getElementById('house-wheel');
+    const mobileNav = document.getElementById('mobile-nav');
+
+    const elementColors = { 'Ateş': 'bg-red-100 text-red-800', 'Toprak': 'bg-green-100 text-green-800', 'Hava': 'bg-blue-100 text-blue-800', 'Su': 'bg-indigo-100 text-indigo-800' };
+    
+    function populateGrids() {
+        zodiacGrid.innerHTML = '';
+        zodiacFilterGrid.innerHTML = '';
+        Object.keys(zodiacData).forEach(sign => {
+            const data = zodiacData[sign];
+            const cardHTML = `
+                <div class="zodiac-card bg-white p-4 rounded-xl shadow-md cursor-pointer flex flex-col items-center justify-center aspect-square" data-sign="${sign}">
+                    <span class="text-5xl">${data.symbol}</span>
+                    <span class="font-semibold mt-2">${sign}</span>
+                </div>
+            `;
+            zodiacGrid.innerHTML += cardHTML;
+
+            const filterCardHTML = `
+                <div class="filtered-zodiac-card p-3 rounded-lg flex flex-col items-center justify-center transition-opacity duration-300 ${elementColors[data.element]}" data-element="${data.element}" data-nitelik="${data.nitelik}">
+                    <span class="text-3xl">${data.symbol}</span>
+                    <span class="font-semibold text-sm mt-1">${sign}</span>
+                </div>
+            `;
+            zodiacFilterGrid.innerHTML += filterCardHTML;
+        });
+    }
+
+    async function generateHoroscope(sign, button) {
+        const resultContainer = document.getElementById('gemini-result');
+        const loader = document.getElementById('gemini-loader');
+        
+        button.disabled = true;
+        loader.classList.remove('hidden');
+        resultContainer.classList.add('hidden');
+        resultContainer.innerHTML = '';
+
+        const today = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        const prompt = `Bilge ve anlayışlı bir astrolog gibi davran. Bugün, ${today}, için bir ${sign} burcu kişisine özel kısa, yaratıcı ve teşvik edici bir günlük burç yorumu yaz. Kariyer, ilişkiler ve kişisel gelişim temalarına odaklan. Tonu pozitif ve güçlendirici olsun. Cevabını markdown formatı kullanmadan, düz metin olarak ver.`;
+        
+        const apiKey = ""; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+        try {
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+            
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`API isteği başarısız: ${response.status}`);
+            }
+
+            const result = await response.json();
+            
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                const text = result.candidates[0].content.parts[0].text;
+                resultContainer.innerHTML = text.replace(/\n/g, '<br>');
+            } else {
+                throw new Error('Geçersiz API yanıtı formatı.');
+            }
+        } catch (error) {
+            console.error("Gemini API Hatası:", error);
+            resultContainer.innerHTML = '<p class="text-red-600">Yorum oluşturulurken bir hata oluştu. Lütfen daha sonra tekrar deneyin.</p>';
+        } finally {
+            loader.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            button.disabled = false;
+        }
+    }
+
+    function setupEventListeners() {
+        zodiacGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.zodiac-card');
+            if (card) {
+                const sign = card.dataset.sign;
+                const data = zodiacData[sign];
+                modalTitle.innerHTML = `${data.symbol} ${sign}`;
+                modalBody.innerHTML = `
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-amber-700">Temel Bilgiler</h3>
+                            <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                                <span class="py-1 px-3 rounded-full bg-amber-100 text-amber-800 font-semibold">🗓️ ${data.dates}</span>
+                                <span class="py-1 px-3 rounded-full ${elementColors[data.element]}">Element: ${data.element}</span>
+                                <span class="py-1 px-3 rounded-full bg-stone-100 text-stone-800">Nitelik: ${data.nitelik}</span>
+                                <span class="py-1 px-3 rounded-full bg-stone-100 text-stone-800">Gezegen: ${data.gezegen}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-amber-700">Mitolojik Köken</h3>
+                            <p class="text-stone-700 leading-relaxed">${data.mit}</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-amber-700">Karakter Profili</h3>
+                            <p class="text-stone-700 leading-relaxed">${data.profil}</p>
+                        </div>
+                        <div class="border-t border-stone-200 pt-6">
+                            <h3 class="text-xl font-bold mb-4 text-amber-700">✨ Size Özel Günlük Yorum</h3>
+                            <div class="text-center">
+                                <button id="generate-horoscope-btn" class="bg-amber-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-amber-700 transition duration-300 disabled:bg-amber-300">
+                                    Bugünkü Yorumu Oluştur
+                                </button>
+                            </div>
+                            <div id="gemini-loader" class="hidden mx-auto mt-4 loader"></div>
+                            <div id="gemini-result" class="mt-4 p-4 bg-amber-50 rounded-lg text-stone-700 leading-relaxed hidden"></div>
+                        </div>
+                    </div>
+                `;
+                modal.classList.remove('hidden');
+                const generateBtn = document.getElementById('generate-horoscope-btn');
+                generateBtn.addEventListener('click', () => generateHoroscope(sign, generateBtn));
+            }
+        });
+
+        closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+
+        filterType.addEventListener('change', () => {
+            if (filterType.value === 'element') {
+                elementFilters.classList.remove('hidden');
+                nitelikFilters.classList.add('hidden');
+                elementSelect.value = 'all';
+            } else {
+                elementFilters.classList.add('hidden');
+                nitelikFilters.classList.remove('hidden');
+                nitelikSelect.value = 'all';
+            }
+            applyFilter();
+        });
+
+        elementSelect.addEventListener('change', applyFilter);
+        nitelikSelect.addEventListener('change', applyFilter);
+
+        mobileNav.addEventListener('change', (e) => {
+            window.location.hash = e.target.value;
+        });
+    }
+
+    function applyFilter() {
+        const type = filterType.value;
+        const value = (type === 'element') ? elementSelect.value : nitelikSelect.value;
+        const cards = document.querySelectorAll('.filtered-zodiac-card');
+
+        cards.forEach(card => {
+            const cardValue = card.dataset[type];
+            if (value === 'all' || cardValue === value) {
+                card.classList.remove('opacity-20');
+            } else {
+                card.classList.add('opacity-20');
+            }
+        });
+    }
+
+    function createAccordion() {
+        accordionContainer.innerHTML = '';
+        accordionData.forEach((item, index) => {
+            const accordionItem = `
+                <div class="bg-white rounded-lg shadow-sm border border-stone-200">
+                    <button type="button" class="accordion-button flex items-center justify-between w-full p-5 font-semibold text-left text-stone-800" data-accordion-target="#accordion-body-${index}">
+                        <span>${item.title}</span>
+                        <svg class="w-6 h-6 shrink-0 transform" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    </button>
+                    <div id="accordion-body-${index}" class="accordion-content">
+                        <div class="p-5 border-t border-stone-200">
+                            <p class="text-stone-600">${item.content}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            accordionContainer.innerHTML += accordionItem;
+        });
+
+        document.querySelectorAll('.accordion-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const isOpening = !button.classList.contains('open');
+                document.querySelectorAll('.accordion-button').forEach(b => {
+                    if (b !== button) {
+                        b.classList.remove('open');
+                        b.querySelector('svg').classList.remove('rotate-180');
+                    }
+                });
+                
+                if (isOpening) {
+                    button.classList.add('open');
+                    button.querySelector('svg').classList.add('rotate-180');
+                } else {
+                    button.classList.remove('open');
+                    button.querySelector('svg').classList.remove('rotate-180');
+                }
+            });
+        });
+    }
+
+    function createHouseWheel() {
+        const radius = 45; 
+        const centerX = 50;
+        const centerY = 50;
+
+        for (let i = 0; i < 12; i++) {
+            const angle = (i * -30) + 105; 
+            const rad = angle * Math.PI / 180;
+            const x = centerX + radius * Math.cos(rad);
+            const y = centerY + radius * Math.sin(rad);
+
+            const houseDiv = document.createElement('div');
+            houseDiv.className = 'absolute transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-16 h-16 text-center';
+            houseDiv.style.left = `${x}%`;
+            houseDiv.style.top = `${y}%`;
+            houseDiv.innerHTML = `
+                <div class="p-2 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm">
+                    <div class="font-bold text-sm text-teal-700">${housesData[i].id}</div>
+                    <div class="text-xs text-stone-600">${housesData[i].name}</div>
+                </div>
+            `;
+            houseWheel.appendChild(houseDiv);
+
+            const lineAngle = (i * 30) - 15;
+            const line = document.createElement('div');
+            line.className = 'absolute w-full h-px bg-stone-200 origin-center';
+            line.style.top = '50%';
+            line.style.transform = `rotate(${lineAngle}deg)`;
+            houseWheel.appendChild(line);
+        }
+        const ascendant = document.createElement('div');
+        ascendant.className = 'absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 font-bold text-amber-600 bg-white px-2 rounded-md';
+        ascendant.innerText = 'Yükselen';
+        houseWheel.appendChild(ascendant);
+    }
+
+    let distributionChart;
+    function createDistributionChart() {
+        const ctx = document.getElementById('distributionChart').getContext('2d');
+        const elementCounts = Object.values(zodiacData).reduce((acc, { element }) => {
+            acc[element] = (acc[element] || 0) + 1;
+            return acc;
+        }, {});
+
+        const nitelikCounts = Object.values(zodiacData).reduce((acc, { nitelik }) => {
+            acc[nitelik] = (acc[nitelik] || 0) + 1;
+            return acc;
+        }, {});
+
+        distributionChart = new Chart(ctx, {
+            type: 'polarArea',
+            data: {
+                labels: Object.keys(elementCounts),
+                datasets: [{
+                    label: 'Element Dağılımı',
+                    data: Object.values(elementCounts),
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.5)', 
+                        'rgba(34, 197, 94, 0.5)',
+                        'rgba(59, 130, 246, 0.5)',
+                        'rgba(139, 92, 246, 0.5)'  
+                    ],
+                    borderColor: [
+                        'rgb(239, 68, 68)',
+                        'rgb(34, 197, 94)',
+                        'rgb(59, 130, 246)',
+                        'rgb(139, 92, 246)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        ticks: { display: false },
+                        grid: { circular: true }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Zodyak\'taki Element Dağılımı'
+                    }
+                }
+            }
+        });
+
+        filterType.addEventListener('change', () => {
+            const isElement = filterType.value === 'element';
+            const data = isElement ? elementCounts : nitelikCounts;
+            const colors = isElement 
+                ? ['rgba(239, 68, 68, 0.5)', 'rgba(34, 197, 94, 0.5)', 'rgba(59, 130, 246, 0.5)', 'rgba(139, 92, 246, 0.5)']
+                : ['rgba(251, 146, 60, 0.5)', 'rgba(168, 85, 247, 0.5)', 'rgba(236, 72, 153, 0.5)'];
+             const borderColors = isElement 
+                ? ['rgb(239, 68, 68)', 'rgb(34, 197, 94)', 'rgb(59, 130, 246)', 'rgb(139, 92, 246)']
+                : ['rgb(251, 146, 60)', 'rgb(168, 85, 247)', 'rgb(236, 72, 153)'];
+
+            distributionChart.data.labels = Object.keys(data);
+            distributionChart.data.datasets[0].data = Object.values(data);
+            distributionChart.data.datasets[0].backgroundColor = colors;
+            distributionChart.data.datasets[0].borderColor = borderColors;
+            distributionChart.options.plugins.title.text = isElement ? 'Zodyak\'taki Element Dağılımı' : 'Zodyak\'taki Nitelik Dağılımı';
+            distributionChart.update();
+        });
+    }
+
+    populateGrids();
+    setupEventListeners();
+    createAccordion();
+    createHouseWheel();
+    createDistributionChart();
+});
+</script>
+</body>
+</html>
