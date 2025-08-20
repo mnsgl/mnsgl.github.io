@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wilder Penfield: İnteraktif Beyin Keşfi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Warm Neutrals & Muted Terracotta Accent) -->
+    <!-- Application Structure Plan: A thematic, single-page journey. Starts with a biographical timeline, explains the core 'Montreal Procedure' with an interactive flowchart, features a central 'Interactive Brain Map' for exploring key discoveries (Homunculus, Interpretive Cortex), and concludes with a card-based summary of his legacy and critiques. This non-linear, exploratory structure is chosen over a simple text layout to engage the user and make complex neuroscientific concepts more accessible and memorable. -->
+    <!-- Visualization & Content Choices: Report Info: Penfield's life -> Goal: Organize Chronology -> Viz: Interactive HTML/CSS Timeline -> Interaction: Click to highlight. Justification: More engaging than a list. | Report Info: Montreal Procedure steps -> Goal: Explain Process -> Viz: HTML/CSS Flowchart -> Interaction: Click step to reveal details. Justification: Clarifies a complex procedure. | Report Info: Brain mapping results -> Goal: Explore Discoveries -> Viz: Interactive Brain Map (HTML/CSS hotspots) -> Interaction: Click hotspot to update info panel. Justification: Core interactive element, turns passive reading into active exploration of key findings like the Homunculus and memory recall. | Report Info: Legacy/Critiques -> Goal: Summarize Impact -> Viz: Card-based layout -> Interaction: None. Justification: Easy-to-scan summary of key takeaways. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4B423B;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #C7825E;
+            border-bottom-color: #C7825E;
+        }
+        .content-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .brain-hotspot {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(199, 130, 94, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .brain-hotspot:hover {
+            background-color: rgba(199, 130, 94, 0.9);
+            transform: scale(1.2);
+            border-color: #FFFFFF;
+        }
+        .brain-hotspot.active {
+            background-color: rgba(199, 130, 94, 1);
+            transform: scale(1.2);
+            border-color: #FFFFFF;
+        }
+        .brain-hotspot::after {
+            content: '+';
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 bg-white/80 backdrop-blur-md z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold text-[#4B423B]">Wilder Penfield</h1>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#tanitim" class="nav-link">Tanıtım</a>
+                    <a href="#zaman-cizelgesi" class="nav-link">Zaman Çizelgesi</a>
+                    <a href="#prosedur" class="nav-link">Montreal Prosedürü</a>
+                    <a href="#kesifler" class="nav-link">İnteraktif Keşifler</a>
+                    <a href="#miras" class="nav-link">Miras</a>
+                </div>
+                <div class="md:hidden">
+                    <select id="mobile-nav" class="bg-white border border-gray-300 rounded-md p-2">
+                        <option value="#tanitim">Tanıtım</option>
+                        <option value="#zaman-cizelgesi">Zaman Çizelgesi</option>
+                        <option value="#prosedur">Montreal Prosedürü</option>
+                        <option value="#kesifler">İnteraktif Keşifler</option>
+                        <option value="#miras">Miras</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="tanitim" class="text-center min-h-[60vh] flex flex-col justify-center items-center content-section">
+            <h2 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight">Beynin Kaşifi</h2>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">
+                Dr. Wilder Penfield'in, uyanık beyin ameliyatları yoluyla insan zihninin sırlarını nasıl araladığını ve nörobilimin seyrini nasıl değiştirdiğini interaktif olarak keşfedin.
+            </p>
+            <div class="mt-8 text-2xl animate-bounce">↓</div>
+        </section>
+
+        <section id="zaman-cizelgesi" class="py-16 content-section">
+            <h2 class="text-3xl font-bold text-center mb-12">Hayat ve Kariyer Yolculuğu</h2>
+            <div class="relative wrap overflow-hidden p-10 h-full">
+                <div class="absolute h-full border-2 border-[#C7825E]/30" style="left: 50%"></div>
+                
+                <div class="mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#C7825E] shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto font-semibold text-lg text-white">1</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">1891 - Doğum</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600">Spokane, Washington'da dünyaya geldi.</p>
+                    </div>
+                </div>
+
+                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#C7825E] shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto text-white font-semibold text-lg">2</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">1914 - Oxford</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600">Prestijli Rhodes Bursu'nu kazanarak Oxford'da Sir Charles Sherrington gibi devlerin yanında eğitim aldı.</p>
+                    </div>
+                </div>
+                
+                <div class="mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#C7825E] shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto font-semibold text-lg text-white">3</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">1928 - Montreal'e Taşınma</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600">McGill Üniversitesi'nden teklif alarak Kanada'ya yerleşti ve şehrin ilk beyin cerrahı oldu.</p>
+                    </div>
+                </div>
+
+                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#C7825E] shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto text-white font-semibold text-lg">4</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">1934 - MNI'nin Kuruluşu</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600">Klinik ve temel bilimleri birleştiren Montreal Nöroloji Enstitüsü'nü (MNI) kurdu.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="prosedur" class="py-16 bg-stone-50 rounded-lg content-section">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Montreal Prosedürü</h2>
+                <p class="mt-2 max-w-2xl mx-auto text-gray-600">Epilepsi tedavisini dönüştüren ve beynin sırlarını açığa çıkaran devrim niteliğindeki cerrahi ve keşif yöntemi. Adımları keşfetmek için kartlara tıklayın.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="procedure-step text-center p-6 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" data-step="1">
+                    <div class="text-4xl text-[#C7825E] mb-4">①</div>
+                    <h3 class="text-xl font-semibold mb-2">Uyanık Kraniyotomi</h3>
+                    <p id="step-desc-1" class="text-gray-600 hidden">Hasta lokal anestezi altındadır ve bilinci tamamen açıktır. Bu, cerrahın ameliyat sırasında hastayla iletişim kurarak beynin fonksiyonel alanlarını test etmesini sağlar.</p>
+                </div>
+                <div class="procedure-step text-center p-6 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" data-step="2">
+                    <div class="text-4xl text-[#C7825E] mb-4">②</div>
+                    <h3 class="text-xl font-semibold mb-2">Kortikal Uyarım</h3>
+                    <p id="step-desc-2" class="text-gray-600 hidden">Cerrah, küçük bir elektrotla beyin yüzeyine (korteks) zayıf elektrik akımları uygular. Hastanın verdiği geri bildirimler (hisler, hareketler, anılar) beynin fonksiyonel haritasını oluşturur.</p>
+                </div>
+                <div class="procedure-step text-center p-6 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" data-step="3">
+                    <div class="text-4xl text-[#C7825E] mb-4">③</div>
+                    <h3 class="text-xl font-semibold mb-2">Hedeflenmiş Rezeksiyon</h3>
+                    <p id="step-desc-3" class="text-gray-600 hidden">Fonksiyonel harita çıkarıldıktan ve nöbete neden olan anormal doku (epileptojenik odak) belirlendikten sonra, konuşma veya hareket gibi kritik alanlara zarar vermeden bu doku güvenle çıkarılır.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="kesifler" class="py-16 content-section">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">İnteraktif Beyin Haritası</h2>
+                <p class="mt-2 max-w-2xl mx-auto text-gray-600">Penfield'in uyarım deneylerinin sonuçlarını görmek için beyin üzerindeki aktif noktalara tıklayın.</p>
+            </div>
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                <div class="w-full lg:w-1/2 relative">
+                    <img src="https://placehold.co/600x500/FDFBF8/4B423B?text=Beyin" alt="Beyin şeması" class="w-full h-auto rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/600x500/FDFBF8/4B423B?text=G%C3%B6rsel+Y%C3%BCklenemedi';">
+                    <div id="motor-cortex" class="brain-hotspot" style="top: 20%; left: 40%;"></div>
+                    <div id="sensory-cortex" class="brain-hotspot" style="top: 30%; left: 55%;"></div>
+                    <div id="temporal-lobe" class="brain-hotspot" style="top: 65%; left: 45%;"></div>
+                    <div id="visual-cortex" class="brain-hotspot" style="top: 55%; left: 80%;"></div>
+                </div>
+                <div id="brain-info-panel" class="w-full lg:w-1/2 p-6 bg-white rounded-lg shadow-lg min-h-[400px]">
+                    <h3 id="info-title" class="text-2xl font-bold text-[#C7825E]">Bir Bölge Seçin</h3>
+                    <div id="info-content" class="mt-4 text-gray-700 space-y-4">
+                        <p>Beyin haritası üzerindeki '+' işaretli noktalara tıklayarak Dr. Penfield'in o bölgeyi uyardığında neler keşfettiğini öğrenebilirsiniz.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="miras" class="py-16 bg-stone-50 rounded-lg content-section">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Penfield'in Mirası</h2>
+                <p class="mt-2 max-w-2xl mx-auto text-gray-600">Çalışmalarının nörobilim ve tıp üzerindeki kalıcı etkileri ve bilimsel tartışmalar.</p>
+            </div>
+            <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-3 text-[#C7825E]">Kalıcı Katkıları</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><b>Epilepsi Cerrahisi:</b> Geliştirdiği "Montreal Prosedürü", günümüzdeki modern epilepsi cerrahisinin temelini oluşturmaktadır.</li>
+                        <li><b>Fonksiyonel Haritalama:</b> Beynin motor ve duyu haritalarını (Homunculus) çıkararak nöroanatomi eğitiminde bir devrim yarattı.</li>
+                        <li><b>Hafıza Araştırmaları:</b> Temporal lobun hafızanın depolanmasındaki rolünü göstererek, hafızanın biyolojik temellerine dair ilk somut kanıtları sundu.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-3 text-[#4B423B]">Eleştiriler ve Tartışmalar</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><b>Anormal Beyin Örneklemi:</b> Deneyleri sağlıklı bireylerde değil, kronik epilepsi hastalarında yapılmıştır, bu da sonuçların genellenebilirliğini sınırlar.</li>
+                        <li><b>Hafıza Modeli:</b> Beynin anıları bir "kayıt cihazı" gibi sakladığı fikri, modern hafıza araştırmaları tarafından aşılmıştır. Hafıza artık yeniden inşa edilen bir süreç olarak görülmektedir.</li>
+                        <li><b>Nadirlik:</b> Canlı anıların yeniden yaşandığı "deneyimsel yanıtlar", hastaların sadece küçük bir yüzdesinde (%5-8) gözlemlenmiştir.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-6 border-t border-stone-200">
+        <p class="text-gray-500">Wilder Penfield'in çalışmalarına dayalı interaktif bir keşif.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const brainData = {
+                'motor-cortex': {
+                    title: 'Motor Korteks (Hareket Merkezi)',
+                    content: `
+                        <p>Penfield bu bölgeyi uyardığında, hastaların vücutlarının karşı tarafında istemsiz kas hareketleri (parmak seğirmesi, dudak büzülmesi vb.) gözlemledi. Bu, vücudun hareket haritasının beyinde nasıl temsil edildiğini ortaya çıkardı.</p>
+                        <h4 class="font-bold mt-4">Keşif: Motor Homunculus</h4>
+                        <p>Bu harita, "Motor Homunculus" olarak bilinen, vücut parçalarının kapladığı alana göre orantısız çizilmiş bir insan figürüyle görselleştirildi. Eller ve dudaklar gibi hassas motor kontrol gerektiren bölgeler, beyinde devasa bir alan kaplar.</p>
+                        <img src="https://placehold.co/400x300/EEEEEE/4B423B?text=Motor+Homunculus" alt="Motor Homunculus" class="mt-4 rounded-lg mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/400x300/EEEEEE/4B423B?text=G%C3%B6rsel+Y%C3%BCklenemedi';">
+                    `
+                },
+                'sensory-cortex': {
+                    title: 'Duyusal Korteks (His Merkezi)',
+                    content: `
+                        <p>Motor korteksin hemen arkasındaki bu bölge uyarıldığında, hastalar vücutlarının karşı tarafında karıncalanma, uyuşma veya dokunma gibi hisler bildirdiler.</p>
+                        <h4 class="font-bold mt-4">Keşif: Duyusal Homunculus</h4>
+                        <p>Tıpkı motor harita gibi, vücudun duyu haritası da orantısızdır. Dudaklar, parmak uçları gibi duyusal olarak çok hassas bölgeler, kortekste orantısız bir şekilde büyük temsil edilir. Bu da "Duyusal Homunculus"u oluşturur.</p>
+                         <img src="https://placehold.co/400x300/EEEEEE/4B423B?text=Duyusal+Homunculus" alt="Duyusal Homunculus" class="mt-4 rounded-lg mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/400x300/EEEEEE/4B423B?text=G%C3%B6rsel+Y%C3%BCklenemedi';">
+                    `
+                },
+                'temporal-lobe': {
+                    title: 'Temporal Lob (Yorumlayıcı Korteks)',
+                    content: `
+                        <p>Penfield'in belki de en şaşırtıcı bulguları bu bölgeden geldi. Uyarım, basit hisler yerine karmaşık zihinsel deneyimleri tetikledi.</p>
+                        <h4 class="font-bold mt-4">Deneyimsel Yanıtlar</h4>
+                        <p>Hastaların küçük bir kısmı, geçmişteki anıları (bir şarkı, bir konuşma) son derece canlı ve ayrıntılı bir şekilde yeniden yaşadıklarını bildirdi. Bu, beynin deneyimleri bir yere kaydettiği fikrini doğurdu.</p>
+                        <h4 class="font-bold mt-4">Yorumlayıcı Yanıtlar</h4>
+                        <p>Diğer hastalar ise déjà vu (bu anı daha önce yaşamıştım hissi) veya jamais vu (tanıdık bir şeyin yabancı gelmesi) gibi algısal yanılsamalar veya ani korku/neşe hisleri yaşadılar.</p>
+                    `
+                },
+                'visual-cortex': {
+                    title: 'Görsel ve İşitsel Korteksler',
+                    content: `
+                        <p>Penfield, beynin daha temel duyu alanlarını uyardığında, hastaların tepkileri daha basitti.</p>
+                        <h4 class="font-bold mt-4">Görsel Korteks (Oksipital Lob)</h4>
+                        <p>Bu bölgenin uyarılması, karmaşık görüntüler yerine ışık parlamaları, renkler veya basit geometrik şekiller gibi temel görsel halüsinasyonlara neden oldu.</p>
+                        <h4 class="font-bold mt-4">İşitsel Korteks (Temporal Lob)</h4>
+                        <p>Benzer şekilde, işitme merkezinin uyarılması da bir melodi veya konuşma yerine vızıltı, tıklama veya zil sesi gibi basit seslerin duyulmasına yol açtı.</p>
+                    `
+                }
+            };
+            
+            const hotspots = document.querySelectorAll('.brain-hotspot');
+            const infoTitle = document.getElementById('info-title');
+            const infoContent = document.getElementById('info-content');
+
+            hotspots.forEach(hotspot => {
+                hotspot.addEventListener('click', () => {
+                    hotspots.forEach(h => h.classList.remove('active'));
+                    hotspot.classList.add('active');
+                    
+                    const data = brainData[hotspot.id];
+                    if (data) {
+                        infoTitle.textContent = data.title;
+                        infoContent.innerHTML = data.content;
+                    }
+                });
+            });
+
+            const procedureSteps = document.querySelectorAll('.procedure-step');
+            procedureSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    const stepId = step.dataset.step;
+                    const desc = document.getElementById(`step-desc-${stepId}`);
+                    
+                    document.querySelectorAll('[id^="step-desc-"]').forEach(d => {
+                        if(d !== desc) d.classList.add('hidden');
+                    });
+
+                    desc.classList.toggle('hidden');
+                });
+            });
+
+            const sections = document.querySelectorAll('.content-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            const navLinks = document.querySelectorAll('a.nav-link');
+            const mobileNav = document.getElementById('mobile-nav');
+            
+            function smoothScroll(targetId) {
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    smoothScroll(link.getAttribute('href'));
+                });
+            });
+            
+            mobileNav.addEventListener('change', (e) => {
+                 smoothScroll(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>
