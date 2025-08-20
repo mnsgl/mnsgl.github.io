@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White Mod Varsayılan Menü</title>
+    <style>
+        /* CSS Değişkenleri ile Tema Renkleri */
+        :root {
+            /* Varsayılan: White Mod */
+            --sidebar-bg: #f8f9fa;
+            --sidebar-text: #212529;
+            --sidebar-hover-bg: #e9ecef;
+            --submenu-bg: #f1f3f5;
+            --active-bg: #72b9ff;
+            --active-border: #ffc107;
+            --page-bg: #ffffff;
+            --content-bg: #ffffff;
+            --content-text: #212529;
+            --header-bg: #f8f9fa;
+            --header-text: #212529;
+            --switch-bg: #ccc;
+            --switch-fg: #ffffff;
+            --switch-active-bg: #72b9ff;
+			--parent-open-bg: #007bff; /* YENİ EKLENDİ */
+
+
+        }
+
+        .dark-mode {
+            /* Dark Mod Değerleri */
+            --sidebar-bg: #2c3e50;
+            --sidebar-text: #ecf0f1;
+            --sidebar-hover-bg: #34495e;
+            --submenu-bg: #22303f;
+            --active-bg: #26b99c;
+            --active-border: #f1c40f;
+            --page-bg: #f4f7f6;
+            --content-bg: #ffffff;
+            --content-text: #333;
+            --header-bg: #2c3e50;
+            --header-text: #ffffff;
+            --switch-bg: #34495e;
+            --switch-fg: #f1c40f;
+            --switch-active-bg: #26b99c;
+			--parent-open-bg: #187764; /* YENİ EKLENDİ */
+
+        }
+
+        /* --- Temel Sayfa Stilleri --- */
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0; padding: 0;
+            background-color: var(--page-bg);
+            display: flex; height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s;
+        }
+        
+        .menu-toggle-input, #theme-toggle { display: none; }
+
+        /* --- SOL MENÜ (SIDEBAR) --- */
+        .sidebar {
+            flex: 0 0 250px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            transition: background-color 0.3s, color 0.3s, transform 0.3s ease-in-out;
+            overflow-y: auto;
+            display: flex; flex-direction: column;
+        }
+        
+        .sidebar-menu { list-style-type: none; padding: 0; margin: 0; width: 100%; }
+        .sidebar h2 { padding: 20px; margin: 20px 0 0 0; font-size: 1.5em; }
+
+        .submenu {
+            padding-left: 0;
+            overflow: hidden; max-height: 0;
+            transition: max-height 0.4s ease-in-out;
+            background-color: var(--submenu-bg);
+        }
+        
+        li.open > .submenu { max-height: 500px; }
+
+        .tab-link {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 25px; cursor: pointer;
+            transition: background-color 0.3s, border-left 0.3s;
+            border-left: 4px solid transparent;
+            font-size: 1.1em;
+            color: var(--sidebar-text);
+            text-decoration: none; width: 100%;
+        }
+
+        .submenu .tab-link { font-size: 1em; padding: 12px 25px 12px 40px; }
+        .tab-link:hover { background-color: var(--sidebar-hover-bg); }
+		
+        .tab-link.active {
+            background-color: var(--active-bg);
+            border-left: 4px solid var(--active-border);
+            font-weight: bold;
+        }
+		
+		/* === YENİ KURALI BURAYA EKLEYİN === */
+        li.open > .parent-link {
+            background-color: var(--parent-open-bg);
+        }
+        /* ================================== */
+        
+        .parent-link .arrow { transition: transform 0.3s; }
+        li.open > .parent-link .arrow { transform: rotate(90deg); }
+
+        /* --- Tema Değiştirici Stilleri --- */
+        .theme-switcher-container { margin-top: auto; padding: 20px 25px; }
+        .theme-switcher { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .theme-switcher .toggle-label {
+            position: relative; display: inline-block;
+            width: 50px; height: 26px;
+            background-color: var(--switch-bg);
+            border-radius: 26px;
+            transition: background-color 0.3s;
+        }
+        .theme-switcher .toggle-label::after {
+            content: ''; position: absolute;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background-color: var(--switch-fg);
+            top: 3px; left: 4px;
+            transition: transform 0.3s;
+        }
+        #theme-toggle:checked + .toggle-label { background-color: var(--switch-active-bg); }
+        #theme-toggle:checked + .toggle-label::after { transform: translateX(23px); }
+
+        /* --- SAYFA KONTEYNERİ, HEADER, İÇERİK --- */
+        .page-container { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .mobile-header {
+            display: none; padding: 10px 15px;
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            align-items: center; position: relative; z-index: 5;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .menu-toggle-label span { display: block; width: 25px; height: 3px; background-color: var(--header-text); margin: 5px 0; }
+        .header-title { margin-left: 15px; font-size: 1.2em; font-weight: bold; }
+        .content-area { flex: 1; background-color: var(--content-bg); overflow: hidden; }
+        #content-frame { width: 100%; height: 100%; border: none; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9; }
+
+        /* --- MOBİL UYUMLULUK --- */
+        @media (max-width: 768px) {
+            body { display: block; height: auto; }
+            .page-container { height: 100vh; }
+            .sidebar { position: fixed; left: 0; top: 0; height: 100%; z-index: 10; transform: translateX(-100%); flex-basis: 250px; }
+            .mobile-header { display: flex; }
+            .menu-toggle-input:checked ~ .sidebar { transform: translateX(0); }
+            .menu-toggle-input:checked ~ .overlay { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <input type="checkbox" id="menu-toggle" class="menu-toggle-input">
+
+    <div class="sidebar">
+        <div>
+            <h2>Kategoriler</h2>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="tab-link active" data-src="burc.html">Anasayfa</a></li>
+                <li class="has-submenu">
+                    <a href="#" class="tab-link parent-link"><span>Profil Bilgileri</span><span class="arrow">▶</span></a>
+                    <ul class="submenu">
+                        <li><a href="#" class="tab-link" data-src="profil-goruntule.html">Profili Görüntüle</a></li>
+                        <li><a href="#" class="tab-link" data-src="profil-duzenle.html">Profili Düzenle</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="theme-switcher-container">
+            <div class="theme-switcher">
+                <span id="theme-label">White Mode</span>
+                <input type="checkbox" id="theme-toggle">
+                <label for="theme-toggle" class="toggle-label"></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <header class="mobile-header">
+            <label for="menu-toggle" class="menu-toggle-label"><span></span><span></span><span></span></label>
+            <div class="header-title">Menü</div>
+        </header>
+        <div class="content-area">
+            <iframe id="content-frame" src="anasayfa.html" name="content-frame"></iframe>
+        </div>
+    </div>
+    
+    <label for="menu-toggle" class="overlay"></label>
+
+    <script>
+        // Gerekli DOM elementlerini seç
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const contentFrame = document.getElementById('content-frame');
+        const menuToggle = document.getElementById('menu-toggle');
+        const parentLinks = document.querySelectorAll('.parent-link');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeLabel = document.getElementById('theme-label');
+        const body = document.body;
+
+        // --- TEMA DEĞİŞTİRME (BASİTLEŞTİRİLMİŞ) ---
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                // Anahtar işaretliyse Dark Moda geç
+                body.classList.add('dark-mode');
+                themeLabel.textContent = 'Dark Mode';
+            } else {
+                // İşaretli değilse White Moda (varsayılan) dön
+                body.classList.remove('dark-mode');
+                themeLabel.textContent = 'White Mode';
+            }
+        });
+
+        // --- ALT MENÜ İŞLEVSELLİĞİ ---
+        parentLinks.forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                this.parentElement.classList.toggle('open');
+            });
+        });
+
+        // --- SAYFA YÜKLEME İŞLEVSELLİĞİ ---
+        tabLinks.forEach(function(link) {
+            if (!link.classList.contains('parent-link')) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    tabLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    const pageToLoad = this.getAttribute('data-src');
+                    contentFrame.src = pageToLoad;
+                    if (window.innerWidth <= 768) {
+                        menuToggle.checked = false;
+                    }
+                });
+            }
+        });
+		
+		document.addEventListener('DOMContentLoaded', () => {
+			let theme = new URLSearchParams(new URL(window.location.href).search).get("theme")
+			if(theme !== null && ['dark', 'white'].includes(theme)) {
+				if(theme === "dark") {
+					body.classList.add('dark-mode');
+					themeLabel.textContent = 'Dark Mode';
+					themeToggle.checked = true
+				}
+				
+				if(theme === "white") {
+					body.classList.remove('dark-mode');
+                	themeLabel.textContent = 'White Mode';
+					themeToggle.checked = false
+				}
+			}
+
+		})
+    </script>
+
+</body>
+</html>
