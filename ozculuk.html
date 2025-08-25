@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özcülük, Evrim ve Çatışmaları</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Modern Aydınlık Tema Stilleri */
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --accent-color: #007bff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        #main-header {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            padding-top: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #main-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+
+        #navbar {
+            position: relative;
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            padding: 5px 0;
+        }
+
+        #navbar ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 12px 18px;
+            font-weight: bold;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            display: block;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        #navbar ul li a:hover {
+            color: var(--text-primary);
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+        
+        #navbar ul li a.active {
+            color: var(--accent-color);
+        }
+
+        #navbar ul li a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+
+        /* Hamburger Menü Butonu */
+        #menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1001;
+        }
+
+        #menu-toggle svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--text-primary);
+            transition: transform 0.3s ease;
+        }
+
+        #close-icon {
+            display: none;
+        }
+
+
+        main {
+            padding: 40px 0;
+        }
+
+        section {
+            background: var(--bg-secondary);
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        section h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            font-size: 2rem;
+        }
+
+        section h3 {
+            color: var(--text-primary);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        ul {
+            list-style-position: inside;
+            margin-left: 20px;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+        
+        strong {
+            color: var(--text-primary);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table caption {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        table, th, td {
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #e9ecef;
+            color: var(--text-primary);
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        footer {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive Tasarım */
+        @media (max-width: 768px) {
+            #main-header h1 {
+                font-size: 1.8rem;
+                padding: 0 10px;
+            }
+            
+            #navbar {
+                min-height: 60px;
+            }
+
+            #menu-toggle {
+                display: block;
+            }
+
+            #nav-links {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background-color: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(5px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+                transform: translateY(-100%);
+                transition: transform 0.4s ease-in-out;
+            }
+
+            #nav-links.show {
+                display: flex;
+                transform: translateY(0);
+            }
+            
+            #navbar ul li {
+                width: 80%;
+                text-align: center;
+            }
+
+            #navbar ul li a {
+                padding: 20px;
+                font-size: 1.2rem;
+            }
+
+            #navbar ul li a.active::after {
+                display: none;
+            }
+            
+            section {
+                padding: 25px;
+            }
+
+            section h2 {
+                font-size: 1.6rem;
+            }
+
+            section h3 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            #main-header h1 {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="main-header">
+        <div class="container">
+            <h1>Özün Ötesinde</h1>
+            <nav id="navbar">
+                <button id="menu-toggle" aria-label="Menüyü aç/kapat">
+                    <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+                    <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+                </button>
+                <ul id="nav-links">
+                    <li><a href="#bolum1">Özcülük Felsefesi</a></li>
+                    <li><a href="#bolum2">Biyolojide Özcülük</a></li>
+                    <li><a href="#bolum3">Evrim Teorisi</a></li>
+                    <li><a href="#bolum4">Felsefi Çatışma</a></li>
+                    <li><a href="#bolum5">Halka Türler</a></li>
+                    <li><a href="#bolum6">Sonuç</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="bolum1">
+            <h2>Bölüm 1: Özcülük Felsefesine Giriş</h2>
+            <h3>1.1. Özcülük Nedir? Temel Tanım ve Kavramlar</h3>
+            <p>Özcülük (essentialism), en temel anlamıyla, bir nesnenin veya bir kavramın kimliğini oluşturan, onu "o şey yapan" bir dizi gerekli, değişmez ve içsel niteliğin var olduğunu savunan felsefi görüştür. Bu nitelikler bütününe "öz" (essence) adı verilir ve bu özün, o şeyin dışarıdan gözlemlenen, değişken özelliklerinin (zahiri tezahürlerinin) arkasında yatan gerçek tabiatı olduğuna inanılır. Bu felsefeye göre, bir varlık bu temel ve zorunlu özelliklerden birini yitirirse, artık o varlık olmaktan çıkar. Örneğin, bir üçgenin "özü" üç kenarlı ve iç açılarının toplamının 180° olmasıdır; bu özelliklerden yoksun bir şekil, tanım gereği artık bir üçgen değildir. Özcülük, bu özlerin evrensel, sabit ve zamandan bağımsız olduğunu ileri sürer.</p>
+            
+            <h3>1.2. Felsefi Kökenler: Platon ve Aristoteles</h3>
+            <p>Özcülüğün Batı felsefesindeki kökleri, Antik Yunan'a, özellikle Platon ve öğrencisi Aristoteles'e kadar uzanır. Platon'un Formlar (İdealar) Teorisi, özcü düşüncenin en rafine ilk formülasyonudur. Platon'a göre, duyularımızla algıladığımız fiziksel dünya kusurlu ve aldatıcıdır; asıl gerçeklik, yalnızca akıl yoluyla kavranabilen, ezeli, ebedi ve değişmez "Formlar" dünyasında bulunur. Aristoteles'in Töz (Ousia) Anlayışı ise "öz"ü fiziksel dünyanın içine, yani nesnelerin kendisine yerleştirmiştir. Aristoteles'e göre her bir varlığın, onu o varlık yapan bir "tözü" veya "özü" vardır.</p>
+        </section>
+
+        <section id="bolum2">
+            <h2>Bölüm 2: Biyolojide Tipolojik Düşünce</h2>
+            <h3>2.1. Linnaeus ve Sınıflandırmanın Altın Çağı</h3>
+            <p>Modern taksonominin kurucusu Carl Linnaeus'un 18. yüzyıldaki çalışmaları, Aristotelesçi özcü düşüncenin biyolojideki en sistematik uygulamasını temsil eder. Linnaeus, canlıları hiyerarşik bir sistem içinde sınıflandırmıştır. Ancak bu sınıflandırmanın altında yatan felsefi varsayım, her türün sabit, değişmez ve bir defa yaratılmış olduğu fikriydi. Bu bakış açısı, "Tipolojik Tür Kavramı" olarak bilinir.</p>
+
+            <h3>2.2. "İdeal Tip" ve Varyasyonun Göz Ardı Edilmesi</h3>
+            <p>Tipolojik yaklaşıma göre, bir tür, zihinsel bir "ideal tip" veya "arketip" ile tanımlanır. Bu düşünce sisteminde, aynı türe ait bireyler arasındaki farklılıklar, yani varyasyon, anlamlı bir biyolojik olgu olarak görülmezdi. Aksine, varyasyon, ideal tipten bir sapma, bir "kusur" veya dikkate alınması gerekmeyen anlamsız bir "gürültü" olarak kabul edilirdi. Charles Darwin'in evrim teorisi ise tam da bu göz ardı edilen çeşitliliğin hikayesini anlatarak biyolojide bir devrim yaratacaktır.</p>
+        </section>
+
+        <section id="bolum3">
+            <h2>Bölüm 3: Evrim Teorisi</h2>
+            <h3>3.1. Evrimin Temel Mekanizmaları</h3>
+            <p>Evrim, bir popülasyonun gen havuzundaki alel frekanslarının nesiller içinde değişmesidir. Bu süreci yönlendiren birkaç temel mekanizma vardır:</p>
+            <ul>
+                <li><strong>Doğal Seçilim:</strong> Belirli bir çevrede, bazı kalıtsal özelliklere sahip bireylerin hayatta kalma ve üreme başarısı diğerlerinden daha yüksek olur.</li>
+                <li><strong>Mutasyon:</strong> DNA'da meydana gelen kalıcı ve rastgele değişikliklerdir ve popülasyona yeni genetik varyasyonlar sokar.</li>
+                <li><strong>Genetik Sürüklenme:</strong> Özellikle küçük popülasyonlarda, gen frekanslarının şansa bağlı olarak dalgalanmasıdır.</li>
+                <li><strong>Gen Akışı (Göç):</strong> Farklı popülasyonlar arasında bireylerin göç etmesiyle genlerin taşınmasıdır.</li>
+            </ul>
+
+            <h3>3.2. Varyasyonun Rolü: Evrimin Ham Maddesi</h3>
+            <p>Evrim teorisinin getirdiği en köklü devrim, varyasyona bakış açısını değiştirmesidir. Özcü düşüncenin bir "kusur" olarak gördüğü bireyler arası farklılıklar, evrimsel düşünce için sürecin temel ham maddesidir. Doğal seçilim, ancak üzerinde işleyebileceği bir genetik çeşitlilik varsa anlamlıdır.</p>
+        </section>
+
+        <section id="bolum4">
+            <h2>Bölüm 4: Felsefi Çatışma</h2>
+            <h3>4.1. Statik "Öz"e Karşı Dinamik Popülasyon</h3>
+            <p>Çatışmanın kalbinde, varlığın doğasına ilişkin iki karşıt görüş yatar: Özcülük dünyayı statik ve değişmez "tiplerden" oluşur görürken, evrimsel düşünce dünyayı sürekli değişen ve dönüşen popülasyonlardan oluşur görür. Bu, "tipolojik düşünce"den "popülasyon düşüncesi"ne geçişi temsil eden temel bir zihinsel devrimdir.</p>
+            
+            <div class="table-container">
+                <table>
+                    <caption>Tablo 1: Özcü ve Evrimsel Düşüncenin Karşılaştırılması</caption>
+                    <thead>
+                        <tr>
+                            <th>Özellik</th>
+                            <th>Özcü (Tipolojik) Yaklaşım</th>
+                            <th>Evrimsel (Popülasyon) Yaklaşım</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Varlığın Doğası</strong></td>
+                            <td>Statik, değişmez, bir "öz" tarafından tanımlanır.</td>
+                            <td>Dinamik, zaman içinde sürekli değişir.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tür Tanımı</strong></td>
+                            <td>Sabit bir "ideal tipe" uyan bireyler topluluğu.</td>
+                            <td>Kendi aralarında üreyebilen, genetik olarak yalıtılmış popülasyonlar.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Varyasyonun Rolü</strong></td>
+                            <td>Önemsiz, ideal tipten bir sapma, bir "kusur".</td>
+                            <td>Esas, evrimin ham maddesi, seçilimin temelidir.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="bolum5">
+            <h2>Bölüm 5: Halka Türler: Canlı Kanıt</h2>
+            <h3>5.1. Halka Tür (Ring Species) Nedir?</h3>
+            <p>Halka tür, bir türün popülasyonlarının coğrafi bir engelin etrafında bir halka şeklinde yayıldığı özel bir durumdur. Halkanın etrafındaki her komşu popülasyon birbiriyle çiftleşebilir. Ancak, halkanın iki ucu tekrar bir araya geldiğinde, bu uçlardaki popülasyonlar o kadar farklılaşmıştır ki artık birbirleriyle çiftleşemezler. Bu olgu, tek bir türün zaman içinde nasıl iki ayrı türe dönüştüğünü gösteren mükemmel bir doğal deneydir.</p>
+
+            <h3>5.2. Halka Türlerin Felsefi Sonuçları: "Öz"ün İmkansızlığı</h3>
+            <p>Halka türler, özcülük felsefesine ölümcül bir darbe vurur. Bizi şu soruyla baş başa bırakırlar: Bu halkanın "tür özü" nedir ve nerede başlar, nerede biter? Zincirin herhangi bir noktasına "tür sınırı burasıdır" demek tamamen keyfi olacaktır. Bu paradoks, "tür"ün sabit, değişmez bir kategori veya içsel bir "öz" olmadığını kanıtlar. Doğada keskin sınırlar değil, süreçler ve kademeli geçişler vardır.</p>
+        </section>
+
+        <section id="bolum6">
+            <h2>Bölüm 6: Sonuç</h2>
+            <h3>6.1. Bilimsel Düşüncedeki Devrim</h3>
+            <p>Özcülük ile evrim teorisi arasındaki karşıtlık, biyoloji tarihinde köklü bir paradigma değişimini temsil eder. Bu değişim, canlılar dünyasını sabit "tipler" koleksiyonu olarak gören bir felsefi çerçeveden, sürekli değişen ve ortak bir atadan gelen popülasyonlar olarak gören Darwinci bir bilimsel çerçeveye geçiştir. Türler, ebedi kategoriler olmaktan çıkıp, evrimsel süreçlerin geçici ve dinamik ürünleri olarak anlaşılmıştır.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Özcülük ve evrim arasındaki felsefi ve bilimsel tartışma.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainHeader = document.getElementById('main-header');
+            const sections = document.querySelectorAll('section');
+            const navLinksList = document.querySelectorAll('#navbar ul li a');
+            let intersectionObserver;
+
+            // --- Mobil Menü (Hamburger) Fonksiyonları ---
+            const menuToggle = document.getElementById('menu-toggle');
+            const navLinks = document.getElementById('nav-links');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('show');
+                    const isMenuOpen = navLinks.classList.contains('show');
+                    menuIcon.style.display = isMenuOpen ? 'none' : 'block';
+                    closeIcon.style.display = isMenuOpen ? 'block' : 'none';
+                    // Menü açıldığında sayfanın kaymasını engelle
+                    document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+                });
+            }
+
+            // Menüdeki bir linke tıklandığında menüyü kapat
+            navLinksList.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && navLinks.classList.contains('show')) {
+                        navLinks.classList.remove('show');
+                        menuIcon.style.display = 'block';
+                        closeIcon.style.display = 'none';
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+
+            // --- Sayfa Kaydırıldığında Aktif Menü Öğesini Vurgulama Fonksiyonları ---
+            function updateObserverOptions(headerHeight) {
+                if (intersectionObserver) {
+                    intersectionObserver.disconnect();
+                }
+
+                const options = {
+                    root: null,
+                    threshold: 0.4, // Eşiği biraz düşürerek daha erken tetiklenmesini sağla
+                    rootMargin: `-${headerHeight + 10}px 0px -40% 0px` 
+                };
+
+                intersectionObserver = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            navLinksList.forEach(link => link.classList.remove('active'));
+                            const id = entry.target.getAttribute('id');
+                            const activeLink = document.querySelector(`#navbar ul li a[href="#${id}"]`);
+                            if (activeLink) {
+                                activeLink.classList.add('active');
+                            }
+                        }
+                    });
+                }, options);
+
+                sections.forEach(section => {
+                    intersectionObserver.observe(section);
+                });
+            }
+
+            function handleHeaderResize() {
+                const headerHeight = mainHeader.offsetHeight;
+                document.documentElement.style.scrollPaddingTop = `${headerHeight + 20}px`;
+                updateObserverOptions(headerHeight);
+            }
+
+            const resizeObserver = new ResizeObserver(handleHeaderResize);
+            if(mainHeader) {
+                resizeObserver.observe(mainHeader);
+            }
+
+            handleHeaderResize();
+        });
+    </script>
+</body>
+</html>
