@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evrimsel Düşüncenin Evrimi: Lamarck ve Darwin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Değişkenleri ve Temel Ayarlar */
+        :root {
+            --bg-color: #ffffff;
+            --surface-color: #f8f9fa;
+            --primary-text-color: #1a202c;
+            --secondary-text-color: #4a5568;
+            --primary-accent-color: #3b82f6;
+            --light-accent-color: #dbeafe;
+            --border-color: #e2e8f0;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --header-bg: #111827;
+            --header-text: #f9fafb;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: var(--surface-color);
+            color: var(--primary-text-color);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Ana İçerik Alanı */
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 2rem 2.5rem;
+            background-color: var(--bg-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px var(--shadow-color), 0 10px 10px -5px var(--shadow-color);
+        }
+
+        /* Başlık (Header) */
+        header {
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        /* Navigasyon Menüsü */
+        nav {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0.75rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        nav a {
+            color: var(--secondary-text-color);
+            text-decoration: none;
+            margin: 0 5px;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        nav a:hover, nav a.active {
+            color: var(--primary-accent-color);
+            background-color: var(--light-accent-color);
+        }
+
+        #menu-toggle {
+            display: none; /* Masaüstünde gizli */
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+        }
+        #menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background-color: var(--primary-text-color);
+            margin: 5px 0;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        #menu-toggle.open span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        #menu-toggle.open span:nth-child(2) {
+            opacity: 0;
+        }
+        #menu-toggle.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+
+        /* Bölümler (Sections) */
+        section {
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        section:last-of-type {
+            border-bottom: none;
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary-text-color);
+            margin-top: 0;
+            margin-bottom: 2rem;
+        }
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary-text-color);
+            margin-top: 2.5rem;
+            font-weight: 600;
+        }
+        p, li {
+            color: var(--secondary-text-color);
+            font-size: 1.05rem;
+        }
+
+        /* Tablo Stilleri */
+       .table-container {
+            overflow-x: auto;
+            margin: 2.5rem 0;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        table tr:last-child td {
+            border-bottom: none;
+        }
+        th {
+            background-color: var(--surface-color);
+            color: var(--primary-text-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        td {
+            color: var(--secondary-text-color);
+        }
+        td:first-child {
+            font-weight: 500;
+            color: var(--primary-text-color);
+        }
+
+        /* Liste Stilleri */
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        li::marker {
+            color: var(--primary-accent-color);
+        }
+
+
+        /* Alt Bilgi (Footer) */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            margin-top: 2rem;
+            background-color: var(--surface-color);
+            color: var(--secondary-text-color);
+            font-size: 0.9rem;
+        }
+
+        /* Mobil Uyum (Responsive Design) */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+            nav {
+                justify-content: flex-end; /* Butonu sağa yasla */
+            }
+            #menu-toggle {
+                display: block; /* Hamburger menüyü göster */
+            }
+            #nav-links {
+                display: none; /* Linkleri varsayılan olarak gizle */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--bg-color);
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: 0 4px 6px var(--shadow-color);
+                border-top: 1px solid var(--border-color);
+            }
+            #nav-links.show {
+                display: flex; /* JS ile gösterildiğinde */
+            }
+            nav a {
+                margin: 0;
+                padding: 1rem;
+                text-align: center;
+                border-radius: 0;
+                border-bottom: 1px solid var(--border-color);
+            }
+            nav a:last-child {
+                border-bottom: none;
+            }
+            main {
+                margin: 20px 15px;
+                padding: 1.5rem;
+            }
+            h2 {
+                font-size: 1.7rem;
+            }
+            h3 {
+                font-size: 1.3rem;
+            }
+            p, li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Evrimsel Düşüncenin Evrimi: Lamarck'tan Darwin'e</h1>
+    </header>
+
+    <nav>
+        <div id="nav-links">
+            <a href="#giris" class="active">Giriş</a>
+            <a href="#lamarck">Lamarck'ın Teorisi</a>
+            <a href="#gecersizlik">Lamarckçılığın Çürütülmesi</a>
+            <a href="#darwin">Darwin Devrimi</a>
+            <a href="#sonuc">Sonuç</a>
+        </div>
+        <button id="menu-toggle" aria-label="Menüyü aç/kapat">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <main>
+        <section id="giris">
+            <h2>Giriş: Jean-Baptiste Lamarck, Evrimsel Düşüncenin Öncüsü</h2>
+            <p>Jean-Baptiste Lamarck, canlıların zaman içinde değiştiği fikrini tutarlı ve mekanik bir temele oturtan ilk doğa bilimci olarak tarihteki yerini almıştır. Lamarck'ın çalışmalarından önce, Batı dünyasında hakim olan görüş, türlerin yaratıldıkları andan itibaren sabit ve değişmez olduğu yönündeydi. Bu dogma, canlı çeşitliliğini ilahi bir müdahalenin sonucu olarak kabul ediyordu. Lamarck, bu statik dünya görüşüne meydan okuyarak, türlerin sabit olmadığını, aksine çevreleriyle etkileşimleri sonucunda yavaş yavaş dönüştüğünü ("başkalaşım" veya "transmutasyon") öne süren kapsamlı bir teori geliştirdi.</p>
+            <p>Lamarck'ın teorisi, 18. ve 19. yüzyılın Aydınlanma Çağı'nın entelektüel ikliminin bir ürünüdür. Bu dönem, doğal fenomenleri doğaüstü güçlere başvurmadan, natüralist açıklamalarla anlama arayışını teşvik etmiştir. Lamarck, bu zihinsel devrimin bir parçası olarak, yaşamın çeşitliliğini ve karmaşıklığını açıklamak için tamamen doğal süreçlere dayanan bir mekanizma sunmuştur. Bu rapor, öncelikle Lamarck'ın evrim teorisinin mekaniklerini derinlemesine inceleyecek, ardından bu teorinin bilimsel olarak neden geçersiz kılındığını detaylandıracak ve son olarak Charles Darwin'in doğal seçilim teorisinin nasıl daha sağlam ve kanıta dayalı bir model sunarak onun yerini aldığını açıklayacaktır.</p>
+        </section>
+
+        <section id="lamarck">
+            <h2>Bölüm 1: Lamarckçı Evrimin Mekanikleri: İki Aşamalı Bir Mekanizma</h2>
+            <p>Lamarck'ın evrim kuramı, birbiriyle ilişkili iki temel ilke üzerine kuruludur. Bu ilkeler, canlıların hem zaman içinde karmaşıklaştığını hem de çevrelerine uyum sağladığını açıklamayı amaçlar.</p>
+            
+            <h3>1.1. Birincil İlke: Karmaşıklığa Doğru İçsel Bir İtici Güç (Le Pouvoir de la Vie)</h3>
+            <p>Lamarck, yaşamın doğasında basitten karmaşığa doğru ilerlemeye yönelik içsel bir "yaşam gücü" veya "hayatiyet gücü" olduğuna inanıyordu. Bu ilkeye göre, en basit yaşam formları "kendiliğinden üreyiş" yoluyla cansız maddeden sürekli olarak ortaya çıkar ve bu içsel güç tarafından zamanla daha karmaşık ve organize yapılara doğru itilir. Bu süreç, her basamağında daha karmaşık bir canlı grubunun yer aldığı bir "yürüyen merdiven" (escalator) benzetmesiyle açıklanabilir. Lamarck, özellikle uzmanlık alanı olan omurgasızlardan memelilere doğru gözlemlediği hiyerarşik yapıyı, bu sürekli ilerlemenin bir kanıtı olarak görmüştür. Bu görüş, Aristoteles'ten beri gelen ve canlıları statik bir hiyerarşiye dizen <em>scala naturae</em> (Varlık Zinciri) fikrinin, Lamarck tarafından dinamik ve ilerlemeci bir sürece dönüştürülmüş halidir. Bu ilke uyarınca, canlılar nesiller boyunca kaçınılmaz olarak "mükemmelliğe" doğru ilerler.</p>
+
+            <h3>1.2. İkincil İlke: Çevrenin Şekillendirici Etkisi (L'influence des Circonstances)</h3>
+            <p>Lamarck'a göre, canlıların karmaşıklığa doğru ilerleyişi dosdoğru bir çizgide gerçekleşmez. Çevresel koşullar, bu ilerlemeyi saptırarak canlıları yerel ortamlara uyum sağlamaya zorlar. "Olayların etkisi" olarak adlandırılan bu ikincil ilke, Lamarck'ın teorisinin en bilinen ve en çok eleştirilen kısmını oluşturur ve birbiriyle bağlantılı iki yasadan meydana gelir.</p>
+
+            <h4>Yasa 1: Kullanma ve Kullanmama İlkesi</h4>
+            <p>Bu yasa, bir canlının yaşamı boyunca sık ve sürekli olarak kullandığı organların güçleneceğini, gelişeceğini ve büyüyeceğini; buna karşın kullanılmayan organların ise zamanla zayıflayacağını, köreleceğini ve nihayetinde ortadan kalkacağını belirtir. Bu süreç, canlının değişen çevre koşullarına yanıt olarak alışkanlıklarını ("huylarını") değiştirmesiyle tetiklenir.</p>
+            <ul>
+                <li><strong>Ana Örnek - Zürafanın Boynu:</strong> Lamarck'ın teorisini açıklamak için kullandığı en ünlü örnek zürafadır. Bu açıklama adım adım şu şekilde ilerler:
+                    <ol>
+                        <li><strong>Çevresel Değişim:</strong> Kuraklık gibi bir çevresel değişiklik, alçak bitki örtüsünün azalmasına neden olur.</li>
+                        <li><strong>Davranışsal Değişim:</strong> Zürafaların ataları, hayatta kalmak için daha yüksek ağaçların yapraklarına ulaşma alışkanlığı edinirler. Bu amaçla sürekli olarak boyunlarını yukarı doğru uzatmaya başlarlar.</li>
+                        <li><strong>Fizyolojik Değişim:</strong> Bu sürekli germe çabası, bireysel zürafanın yaşamı boyunca boynunun, ön bacaklarının ve dilinin fiziksel olarak uzamasına neden olur.</li>
+                    </ol>
+                </li>
+                <li><strong>Destekleyici Örnekler:</strong> Köstebeklerin gözlerinin körelmesi (kullanmama), su kuşlarının perdeli ayaklarının gelişmesi (kullanma) ve bir demircinin kollarının güçlenmesi (analoji) bu ilkeyi desteklemek için kullanılan diğer örneklerdir.</li>
+            </ul>
+
+            <h4>Yasa 2: Kazanılmış Özelliklerin Kalıtımı</h4>
+            <p>Bu yasa, Lamarck'ın teorisinin kilit taşıdır. Bir organizmanın yaşamı boyunca <em>kazandığı</em> fiziksel değişikliklerin (zürafanın uzayan boynu veya demircinin güçlü kolları gibi) doğrudan yavrularına aktarıldığını varsayar. "Yumuşak kalıtım" olarak da bilinen bu kavrama göre, zürafanın germe çabasıyla uzayan boynu, üreme sırasında bir şekilde yavrularına geçer. Lamarck, bu aktarımın, kullanılan organlara doğru akan "sinir sıvısı" gibi içsel sıvılar aracılığıyla gerçekleştiğini düşünmüştür. Dolayısıyla, bir önceki neslin çabasıyla doğan yavrular, hayata zaten biraz daha uzun bir boyunla başlarlar. Bu küçük kazanımların nesiller boyunca birikmesi, günümüz zürafalarının uzun boyunlarını ortaya çıkarmıştır.</p>
+        </section>
+
+        <section id="gecersizlik">
+            <h2>Bölüm 2: Lamarckçılığın Geçersiz Kılınması: Çelişkili Kanıtlar</h2>
+            <p>Lamarck'ın teorisi, evrimsel düşünce tarihinde devrim niteliğinde bir adım olmasına rağmen, zamanla biriken gözlemsel, deneysel ve genetik kanıtlar karşısında geçerliliğini yitirmiştir.</p>
+            
+            <h3>2.1. Gözlemsel ve Mantıksal Zorluklar</h3>
+            <p>Eğer kazanılmış özellikler aktarılıyorsa, yaralanmalar ve kasıtlı bedensel modifikasyonlar da nesilden nesile geçmeliydi. Ancak binlerce yıldır yapılan sünnet uygulamasının kalıtsal bir etkisi gözlemlenmemiştir. Benzer şekilde, bir vücut geliştirmecinin çocuğu doğuştan kaslı olarak dünyaya gelmez.</p>
+
+            <h3>2.2. August Weismann'ın Kesin Darbesi: Germ Plazma Teorisi</h3>
+            <p>19. yüzyılın sonlarında Alman biyolog August Weismann, Lamarckçılığa ilk güçlü darbeyi vurdu. Meşhur deneyinde 20 nesil boyunca farelerin kuyruklarını kesmesine rağmen, yavruların kuyruk uzunluklarında hiçbir azalma olmadığını gözlemledi. Weismann'ın en önemli katkısı, <strong>Germ Plazma Teorisi</strong>'dir. Bu teoriye göre, vücudu oluşturan <strong>somatik hücreler</strong> ile kalıtsal bilgiyi aktaran <strong>germ (eşey) hücreleri</strong> arasında kesin bir ayrım vardır. "Weismann Bariyeri" olarak bilinen ilke, somatik hücrelerden germ hücrelerine doğru bir bilgi akışının olamayacağını, yani vücudun başına gelenlerin kalıtsal talimatları değiştiremeyeceğini öne sürer.</p>
+
+            <h3>2.3. Modern Genetiğin Yükselişi ve Merkezi Dogma</h3>
+            <p>20. yüzyılda genetiğin doğuşu, Weismann'ın öngördüğü mekanizmayı moleküler düzeyde kanıtladı. Genetik, <strong>genotip</strong> (kalıtsal kod) ve <strong>fenotip</strong> (gözlemlenebilir özellikler) arasında hayati bir ayrım yapar. Lamarck'ın teorisi, fenotipteki değişikliklerin genotipi değiştirebileceği varsayımına dayanıyordu, ancak genetik bunun böyle işlemediğini gösterdi. Moleküler biyolojinin <strong>Merkezi Dogması</strong> ($DNA \rightarrow RNA \rightarrow Protein$) ise genetik bilginin akış yönünü tanımlar ve proteinlerden gelen bilginin geriye dönüp DNA kodunu değiştirmesini sağlayan genel bir mekanizma olmadığını ortaya koyarak Lamarck'ın mekanizmasının neden imkansız olduğunun nihai açıklamasını sunar.</p>
+        </section>
+
+        <section id="darwin">
+            <h2>Bölüm 3: Darwin Devrimi: Doğal Seçilim Sahneye Çıkıyor</h2>
+            <p>Lamarck'ın teorisinin zayıflıkları ortaya çıktıkça, Charles Darwin'in doğal seçilime dayalı evrim teorisi, canlıların nasıl değiştiğine dair çok daha güçlü ve kanıta dayalı bir açıklama sunmuştur. Lamarck'a göre çevre, ihtiyaç duyulan varyasyonu <em>yaratırken</em>; Darwin'e göre varyasyon popülasyonda zaten rastgele olarak mevcuttur ve çevre sadece en uygun olanları <em>seçer</em>.</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Özellik</th>
+                            <th>Lamarck'ın Teorisi (Dönüşüm)</th>
+                            <th>Darwin'in Teorisi (Varyasyonel Evrim)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Varyasyonun Kaynağı</td>
+                            <td>Çevre tarafından tetiklenir; canlının yaşamı sırasında kazanılır.</td>
+                            <td>Rastgele ve kalıtsaldır; bir popülasyon içinde önceden mevcuttur (örn. mutasyonlar).</td>
+                        </tr>
+                        <tr>
+                            <td>Değişim Mekanizması</td>
+                            <td>Organların kullanılması/kullanılmaması; kazanılmış özelliklerin kalıtımı.</td>
+                            <td>En uygun varyantların doğal seçilimi.</td>
+                        </tr>
+                        <tr>
+                            <td>Evrimin Birimi</td>
+                            <td>Bireysel organizma (değişir ve bu değişimi aktarır).</td>
+                            <td>Popülasyon (genetik yapısı nesiller içinde değişir).</td>
+                        </tr>
+                        <tr>
+                            <td>Çevrenin Rolü</td>
+                            <td>Bireylerde uyumsal değişimi doğrudan <em>tetikler</em>.</td>
+                            <td>Önceden var olan belirli özellikleri <em>kayıran</em> bir seçici filtredir.</td>
+                        </tr>
+                        <tr>
+                            <td>Adaptasyonun Doğası</td>
+                            <td>Organizmanın ihtiyaç temelli, amaçlı bir tepkisidir.</td>
+                            <td>Rastgele bir sürecin rastgele olmayan bir sonucudur; kendiliğinden ortaya çıkan bir özelliktir.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>3.1. Darwin'in Temel İlkeleri</h3>
+            <p>Doğal Seçilim süreci üç temel ilkeye dayanır:</p>
+            <ol>
+                <li><strong>Varyasyon:</strong> Herhangi bir popülasyon içindeki bireyler, kalıtsal olan bir dizi farklı özellik gösterirler.</li>
+                <li><strong>Kalıtım:</strong> Bu özellikler, ebeveynlerden yavrulara genetik aracılığıyla aktarılır.</li>
+                <li><strong>Farklılaşan Hayatta Kalma ve Üreme (Seçilim):</strong> Belirli bir çevrede, bazı bireyler sahip oldukları özellikler sayesinde diğerlerine göre daha yüksek hayatta kalma ve daha fazla yavru üretme şansına sahip olurlar.</li>
+            </ol>
+
+            <h3>3.2. İş Başında Doğal Seçilim: Açıklayıcı Örnekler</h3>
+            <ul>
+                <li><strong>Zürafanın Boynu, Yeniden:</strong> Darwinci açıklamaya göre, ata zürafa popülasyonunda boyun uzunluğu açısından doğal bir çeşitlilik vardı. Yiyecek kıtlığı gibi bir seçilim baskısı altında, tesadüfen daha uzun boyunlu doğan bireyler daha fazla beslenip daha çok yavru bıraktılar. Nesiller boyunca, "uzun boyun" genlerinin popülasyondaki sıklığı arttı ve türün ortalama boyun uzunluğu giderek uzadı.</li>
+                <li><strong>Sanayi İngiltere'sinin Biberli Güveleri:</strong> Sanayi Devrimi'nden önce açık renkli ağaç gövdelerinde açık renkli güveler kamufle olurken, sanayi kirliliğiyle kararan ağaçlarda koyu renkli güveler avantajlı hale geldi. Bu durum, çevresel baskıdaki bir değişikliğin, popülasyonun genetik yapısında ne kadar hızlı bir evrimsel değişime yol açabildiğini gösteren çarpıcı bir örnektir.</li>
+                <li><strong>Bakterilerde Antibiyotik Direnci:</strong> Bir bakteri popülasyonunda, rastgele mutasyon sonucu antibiyotiğe dirençli birkaç birey bulunur. Antibiyotik kullanıldığında, dirençli olmayanlar ölürken, dirençli olanlar hayatta kalır ve hızla çoğalır. Antibiyotik, direnci <em>yaratmamış</em>, sadece zaten var olan dirençli varyantları <em>seçmiştir</em>.</li>
+            </ul>
+        </section>
+
+        <section id="sonuc">
+            <h2>Sonuç: Bilimsel Anlayışın İlerlemesi</h2>
+            <p>Jean-Baptiste Lamarck, mekanizması yanlış olsa da, evrim fikrini bilimsel tartışmanın merkezine taşıyan bir öncü olarak anılmalıdır. Canlıların değiştiğini ve bu değişimin doğal süreçlerle açıklanabileceğini ilk kez sistemli bir şekilde savunan kişi olarak, Darwin gibi kendisinden sonraki düşünürlere zemin hazırlamıştır.</p>
+            <p>Lamarck'tan Darwin'e geçiş, bilimsel yöntemin zaferini temsil eder. Bilimde teoriler kanıtlarla test edilir, zayıf olanlar elenir ve yerini daha güçlü, daha kapsamlı ve daha iyi öngörü gücüne sahip olanlar alır. Darwin'in teorisi, 20. yüzyılda Mendel genetiği ile birleşerek, günümüz biyolojisinin temelini oluşturan "Modern Sentez"i meydana getirmiştir. Bu sentez, Darwin'in teorisindeki eksik parçayı –varyasyonun ve kalıtımın gerçek doğasını– tamamlayarak, evrimi biyolojinin merkezi düzenleyici ilkesi olarak sağlamlaştırmıştır.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Evrimsel Biyoloji Araştırmaları. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script>
+        // Mobil menü toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            menuToggle.classList.toggle('open');
+        });
+
+        // Kaydırma sırasında aktif linki vurgulama
+        const sections = document.querySelectorAll('main section');
+        const navLinksAnchors = document.querySelectorAll('#nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 60) { // 60px menü yüksekliği için ofset
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinksAnchors.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
