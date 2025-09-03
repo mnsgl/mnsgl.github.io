@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miletli Thales: Kapsamlı Araştırma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Aktif bölümü navigasyonda göstermek için basit bir JS alternatifi CSS çözümü */
+        section {
+            scroll-margin-top: 80px; /* Sticky nav bar yüksekliği kadar boşluk */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Navigasyon Çubuğu -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <h1 class="text-xl font-bold text-blue-600">Thales Araştırması</h1>
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="#hayati" class="text-gray-600 hover:text-blue-600 transition duration-300">Hayatı</a>
+                    <a href="#felsefesi" class="text-gray-600 hover:text-blue-600 transition duration-300">Felsefesi</a>
+                    <a href="#bilim" class="text-gray-600 hover:text-blue-600 transition duration-300">Bilim & Matematik</a>
+                    <a href="#anekdotlar" class="text-gray-600 hover:text-blue-600 transition duration-300">Anekdotlar</a>
+                    <a href="#mirasi" class="text-gray-600 hover:text-blue-600 transition duration-300">Mirası</a>
+                </div>
+                <!-- Mobil Menü Butonu (opsiyonel) -->
+                <div class="md:hidden">
+                    <button id="menu-btn" class="text-gray-600 hover:text-blue-600 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobil Menü -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+            <a href="#hayati" class="block py-2 px-4 text-sm text-gray-600 hover:bg-blue-50">Hayatı</a>
+            <a href="#felsefesi" class="block py-2 px-4 text-sm text-gray-600 hover:bg-blue-50">Felsefesi</a>
+            <a href="#bilim" class="block py-2 px-4 text-sm text-gray-600 hover:bg-blue-50">Bilim & Matematik</a>
+            <a href="#anekdotlar" class="block py-2 px-4 text-sm text-gray-600 hover:bg-blue-50">Anekdotlar</a>
+            <a href="#mirasi" class="block py-2 px-4 text-sm text-gray-600 hover:bg-blue-50">Mirası</a>
+        </div>
+    </nav>
+
+    <!-- Ana İçerik Alanı -->
+    <main class="container mx-auto p-4 md:p-8">
+
+        <!-- Başlangıç Başlığı -->
+        <header class="text-center my-12">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">Miletli Thales: Felsefe ve Bilimin Öncüsü</h2>
+            <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Batı düşünce tarihinin ilk filozofu ve bilim insanı olarak kabul edilen Thales'in hayatı, düşünceleri ve bilime katkıları hakkında tüm detaylar.</p>
+        </header>
+
+        <!-- Bölüm 1: Hayatı -->
+        <section id="hayati" class="mb-16 bg-white p-8 rounded-xl shadow-lg">
+            <h3 class="text-3xl font-bold text-blue-700 border-l-4 border-blue-700 pl-4 mb-6">Hayatı ve Yaşadığı Dönem</h3>
+            <div class="space-y-4 text-lg leading-relaxed text-gray-700">
+                <p>Thales, M.Ö. 624 civarında, günümüz Türkiye'sinin Aydın iline bağlı Didim ilçesi yakınlarında bulunan antik İyonya kenti Miletos'ta (Milet) doğmuştur. Antik kaynakların çoğu onun Miletli olduğunu belirtse de, bazı rivayetler Fenike kökenli olabileceğini de öne sürer. Ancak genel kabul, onun Milet'in saygın bir ailesine mensup olduğu yönündedir.</p>
+                <p>Yaşadığı dönem, Milet'in Akdeniz ticaretinde önemli bir merkez olduğu, farklı kültürlerle (özellikle Mısır ve Mezopotamya) yoğun etkileşim içinde bulunduğu bir refah dönemiydi. Bu kültürel alışveriş, Milet'te bilginin ve yeni fikirlerin gelişmesi için verimli bir ortam yaratmıştır. Thales'in Mısır'a seyahat ettiği ve geometri bilgilerini buradan getirdiği yaygın bir kanıdır. Bu seyahatler, onun sadece bir tüccar değil, aynı zamanda meraklı bir gezgin ve araştırmacı olduğunu göstermektedir.</p>
+                <p>Thales, "Yedi Bilge"den biri olarak anılır. Bu unvan, antik Yunan'da pratik bilgelikleri ve ahlaki öğretileriyle ünlenmiş yedi kişiye verilen bir onurdu. Thales'in bu listeye dahil edilmesi, onun sadece teorik bilgiyle değil, aynı zamanda pratik zekası ve devlet adamlığı yönüyle de tanındığını kanıtlar. M.Ö. 546 civarında yine Milet'te öldüğü tahmin edilmektedir.</p>
+            </div>
+        </section>
+
+        <!-- Bölüm 2: Felsefesi -->
+        <section id="felsefesi" class="mb-16 bg-white p-8 rounded-xl shadow-lg">
+            <h3 class="text-3xl font-bold text-blue-700 border-l-4 border-blue-700 pl-4 mb-6">Felsefesi: "Her Şeyin Temeli Sudur"</h3>
+            <div class="space-y-4 text-lg leading-relaxed text-gray-700">
+                <p>Thales'i felsefe tarihinde eşsiz kılan en önemli özelliği, evreni mitolojik açıklamalar (mythos) yerine doğal nedenlerle açıklamaya (logos) çalışan ilk düşünür olmasıdır. O güne kadar doğa olayları (yağmur, şimşek, deprem vb.) tanrıların eylemleriyle açıklanırken, Thales bu olayların arkasında yatan doğal prensipleri aramıştır. Bu, bilimsel düşüncenin başlangıcı olarak kabul edilen devrimci bir adımdır.</p>
+                <p>Felsefesinin merkezinde "Arkhe nedir?" sorusu yer alır. Arkhe, evreni oluşturan temel, kalıcı ve her şeyin kendisinden türediği "ilk madde" veya "ilke" anlamına gelir. Thales, bu ilk maddenin <strong>su</strong> olduğunu öne sürmüştür. Ona göre, var olan her şey sudan meydana gelmiş ve en sonunda yine suya dönecektir. Hatta Dünya'nın kendisinin de su üzerinde yüzen bir disk olduğunu düşünmüştür.</p>
+                <p>Peki neden su? Aristoteles'e göre Thales'in bu sonuca ulaşmasının birkaç olası nedeni vardır:</p>
+                <ul class="list-disc list-inside space-y-2 pl-4">
+                    <li><strong>Gözlem:</strong> Tüm canlıların yaşamının suya bağlı olduğunu, tohumların nemli bir ortamda filizlendiğini ve besinlerin özünde nem barındırdığını gözlemlemiştir.</li>
+                    <li><strong>Değişim ve Dönüşüm:</strong> Su, katı (buz), sıvı ve gaz (buhar) olmak üzere üç farklı halde bulunabilen tek maddedir. Bu durum, suyun diğer tüm maddelere dönüşebileceği fikrini desteklemiş olabilir.</li>
+                    <li><strong>Coğrafi Konum:</strong> Milet gibi bir liman kentinde yaşaması, okyanus, nehirler ve yağmur gibi suyun gücünü ve önemini her gün gözlemlemesine olanak tanımıştır.</li>
+                </ul>
+                <p>Thales ayrıca ruh (psyche) kavramıyla da ilgilenmiştir. "Her şey tanrılarla doludur" sözü ona atfedilir. Bu söz, panteist bir inanıştan ziyade, doğanın kendiliğinden bir hareket ettirici ilkeye, bir canlılığa sahip olduğunu düşündüğünü gösterir. Mıknatısın demiri çekmesini, onun bir "ruhu" olmasına bağlaması da bu düşüncesinin bir örneğidir.</p>
+            </div>
+        </section>
+
+        <!-- Bölüm 3: Bilim ve Matematik -->
+        <section id="bilim" class="mb-16 bg-white p-8 rounded-xl shadow-lg">
+            <h3 class="text-3xl font-bold text-blue-700 border-l-4 border-blue-700 pl-4 mb-6">Bilim ve Matematiğe Katkıları</h3>
+            <div class="space-y-6 text-lg leading-relaxed text-gray-700">
+                <div>
+                    <h4 class="text-2xl font-semibold mb-2 text-gray-800">Geometri</h4>
+                    <p>Thales, Mısır'da öğrendiği pratik geometri bilgilerini soyut ve ispatlanabilir ilkelere dönüştüren ilk kişilerden biridir. Ona atfedilen en önemli geometrik buluşlar şunlardır:</p>
+                    <ul class="list-decimal list-inside space-y-3 mt-4 pl-4">
+                        <li><strong>Thales Teoremi:</strong> Birbirini kesen iki doğru, paralel iki doğru tarafından kesildiğinde oluşan üçgenlerin karşılıklı kenarlarının oranlarının eşit olması. Bu ilke, pratik ölçümlerde devrim yaratmıştır.</li>
+                        <li>Çapın bir daireyi iki eşit parçaya böldüğünü göstermiştir.</li>
+                        <li>İkizkenar bir üçgenin taban açılarının birbirine eşit olduğunu bulmuştur.</li>
+                        <li>Ters açıların (birbirini kesen iki doğrunun oluşturduğu zıt açıların) eşit olduğunu ispatlamıştır.</li>
+                        <li>Bir yarım daire içine çizilen üçgenin, çapı gören açısının dik açı (90 derece) olduğunu ortaya koymuştur.</li>
+                    </ul>
+                    <p class="mt-4">Bu teorik bilgileri kullanarak pratik sorunları çözmüştür. En bilinen örnek, bir piramidin gölgesinin uzunluğunu, kendi gölgesinin uzunluğuyla kıyaslayarak piramidin yüksekliğini hesaplamasıdır. Aynı şekilde, kıyıdan denizde bulunan bir geminin uzaklığını da üçgenler yardımıyla hesaplayabildiği rivayet edilir.</p>
+                </div>
+                <div>
+                    <h4 class="text-2xl font-semibold mb-2 text-gray-800">Astronomi</h4>
+                    <p>Thales'in bilim tarihindeki en ünlü başarısı, M.Ö. 28 Mayıs 585 tarihinde gerçekleşen güneş tutulmasını önceden tahmin etmesidir. Bu tahmin, Lidyalılar ve Medler arasında yapılan bir savaşın tam ortasında gerçekleşmiş ve her iki tarafın da bunu ilahi bir işaret sayarak savaşı bitirmesine neden olmuştur. Thales'in bu bilgiyi Babilli astronomların kayıtlarından öğrendiği düşünülmektedir. Ancak bu bilgiyi alıp, İyonya'da belirli bir tarih için öngörüde bulunabilmesi, onun astronomi konusundaki derinliğini göstermektedir.</p>
+                     <p class="mt-4">Ayrıca, yılı 365 güne böldüğü, gündönümü ve ekinoks tarihlerini hesapladığı, denizcilere yön bulmaları için Kutup Yıldızı'nı (Küçükayı takımyıldızını) kullanmalarını tavsiye ettiği de söylenenler arasındadır.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bölüm 4: Anekdotlar -->
+        <section id="anekdotlar" class="mb-16 bg-white p-8 rounded-xl shadow-lg">
+            <h3 class="text-3xl font-bold text-blue-700 border-l-4 border-blue-700 pl-4 mb-6">Pratik Bilgeliği ve Anekdotlar</h3>
+            <div class="space-y-6 text-lg leading-relaxed text-gray-700">
+                <p>Thales hakkında anlatılan hikayeler, onun sadece bir teorisyen değil, aynı zamanda pratik zekaya sahip bir bilge olduğunu da gösterir. Bu anekdotlar, onun karakteri ve düşünce yapısı hakkında ipuçları verir:</p>
+                <div class="border-l-4 border-gray-300 pl-4 py-2">
+                    <h4 class="text-xl font-semibold text-gray-800">Zeytin Presleri Kârı</h4>
+                    <p>Aristoteles'in anlattığına göre, Miletliler felsefeyle uğraşmanın para getirmediğini söyleyerek Thales ile alay ederler. Thales, astronomi bilgisi sayesinde o yılki zeytin hasadının çok bereketli geçeceğini öngörür. Kışın, elindeki parayla Milet'teki bütün zeytin preslerini ucuza kiralar. Hasat zamanı geldiğinde, zeytin preslerine olan talep patlar ve Thales, presleri istediği fiyata kiralayarak büyük bir servet kazanır. Bu hikayeyle, filozofların isterlerse kolayca zengin olabileceklerini, ancak onların amacının bu olmadığını kanıtlamak istemiştir.</p>
+                </div>
+                <div class="border-l-4 border-gray-300 pl-4 py-2">
+                    <h4 class="text-xl font-semibold text-gray-800">Kuyuya Düşen Filozof</h4>
+                    <p>Platon'un anlattığı bir başka hikayeye göre ise Thales, bir gece yıldızları gözlemlemek için yürürken gökyüzüne o kadar dalmıştır ki, önündeki kuyuya düşer. Bunu gören Trakyalı hizmetçi bir kadın, "Sen gökyüzünde olanları bilmeye çalışırken, ayağının altındakini göremiyorsun," diyerek onunla dalga geçer. Bu anekdot, filozofların pratik hayattan ne kadar kopuk olabildiklerine dair bir eleştiri olarak anlatılır.</p>
+                </div>
+                 <div class="border-l-4 border-gray-300 pl-4 py-2">
+                    <h4 class="text-xl font-semibold text-gray-800">Nehrin Yönünü Değiştirmesi</h4>
+                    <p>Herodot'un aktardığına göre, Thales, Lidya kralı Kroisos'un Perslere karşı yaptığı sefer sırasında orduya yardım etmiştir. Ordunun Kızılırmak'ı (Halys) geçmesi için köprü olmadığından, Thales nehrin önüne bir kanal kazdırarak nehrin sularını ikiye ayırmış ve seviyesini düşürerek ordunun karşıya geçmesini sağlamıştır. Bu olayın tarihsel gerçekliği tartışmalı olsa da, Thales'in mühendislik bilgisine dair ününü gösterir.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bölüm 5: Mirası -->
+        <section id="mirasi" class="bg-white p-8 rounded-xl shadow-lg">
+            <h3 class="text-3xl font-bold text-blue-700 border-l-4 border-blue-700 pl-4 mb-6">Mirası ve Etkisi</h3>
+            <div class="space-y-4 text-lg leading-relaxed text-gray-700">
+                <p>Thales'in yazılı bir eser bırakıp bırakmadığı bilinmemektedir. Düşünceleri, kendisinden sonra gelen Platon ve Aristoteles gibi filozofların aktarımları sayesinde günümüze ulaşmıştır. Ancak etkileri, Batı düşünce tarihinin temelini oluşturacak kadar derindir:</p>
+                <ul class="list-disc list-inside space-y-2 pl-4">
+                    <li><strong>Milet Okulu'nun Kurucusu:</strong> Thales, öğrencileri Anaksimandros ve Anaksimenes ile birlikte Milet Okulu veya İyonya Okulu olarak bilinen felsefi geleneği başlatmıştır. Bu okul, doğayı doğal nedenlerle açıklama çabasını sürdürmüştür.</li>
+                    <li><strong>Bilimsel Yöntemin Temelleri:</strong> Gözlem, akıl yürütme ve hipotez kurma gibi bilimsel yöntemin temel unsurlarını ilk kullanan kişidir. Evreni anlaşılabilir ve rasyonel bir bütün olarak görmesi, bilimin doğuşuna zemin hazırlamıştır.</li>
+                    <li><strong>Felsefenin Yolunu Açması:</strong> "Her şeyin arkasındaki temel ilke nedir?" sorusunu sorarak, kendisinden sonraki tüm filozoflara yol göstermiştir. Metafizik, ontoloji ve doğa felsefesi gibi alanların temellerini atmıştır.</li>
+                    <li><strong>Matematiğin Soyutlaşması:</strong> Geometriyi sadece pratik bir araç olmaktan çıkarıp, ispat ve aksiyomlara dayalı soyut bir disiplin haline getirme yolunda ilk adımları atmıştır.</li>
+                </ul>
+                <p>Sonuç olarak, Miletli Thales sadece bir filozof değil, aynı zamanda bir matematikçi, astronom, mühendis ve devlet adamıydı. Onun en büyük mirası, evrene dair merakı ve onu anlamak için mitoloji yerine aklı ve gözlemi kullanma cesaretidir. Bu cesur adımıyla, kendisinden sonraki 2500 yıllık bilim ve felsefe serüveninin başlangıç noktasını oluşturmuştur.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white mt-16 border-t">
+        <div class="container mx-auto py-6 text-center text-gray-500">
+            <p>&copy; 2024 Thales Araştırma Projesi. Tüm bilgiler derlenmiştir.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobil menü için basit bir javascript
+        const btn = document.getElementById('menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Mobil menüdeki linklere tıklandığında menüyü kapat
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
